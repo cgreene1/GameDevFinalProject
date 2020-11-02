@@ -41,4 +41,13 @@ public abstract class Building_Functionality : MonoBehaviour
      *} 
     */
 
+
+    //define my own type for this?
+    void spawnUnit(GameObject unitType){
+        //spawn the passed in unit type on call
+        GameObject newUnit = Instantiate<GameObject>(unitType);
+        newUnit.transform.position = new Vector2(getLoc.position.x, getLoc.position.y);
+
+    }
+
 }

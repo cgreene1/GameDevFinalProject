@@ -8,6 +8,7 @@ public abstract class Building_Functionality : MonoBehaviour
     // Location;
     // Faction;
     // Owner;
+    // Prefab;
 
     // Start is called before the first frame update
     void Start()

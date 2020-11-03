@@ -6,7 +6,6 @@ public class Mine : MonoBehaviour
 {
     Transform trans;
     Faction faction;
-    Player player;
     Renderer render;
     Map map;
 

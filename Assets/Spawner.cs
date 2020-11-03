@@ -12,7 +12,7 @@ public class Spawner : MonoBehaviour
     public GameObject unitPrefab;
     Transform trans;
     Faction faction;
-    Player player;
+    // Player player;
     Renderer render;
     Map map;
 

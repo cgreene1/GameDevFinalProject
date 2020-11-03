@@ -7,7 +7,7 @@ public class Mine_Controls : Building_Functionality
     // Start is called before the first frame update
 
     // Type of resource
-    private int resource;
+   private (int,int) income;
 
     void Start()
     {
@@ -28,5 +28,10 @@ public class Mine_Controls : Building_Functionality
     public override void testing()
     {
 
+    }
+
+    public (int,int)showIncome()
+    {
+        return income;
     }
 }

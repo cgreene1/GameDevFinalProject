@@ -60,7 +60,7 @@ public class Faction : MonoBehaviour
 
     void SetSCIFI()
     {
-
+        
     }
 
     void SetFantasy()

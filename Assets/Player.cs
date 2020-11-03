@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,10 +11,10 @@ public class Player : MonoBehaviour
 {
     private LinkedList<Spawner_Controls> spawnerList;
     private LinkedList<Mine_Controls> mineList;
-    // resource at index 0 is common index 1 is less common
-    private LinkedList<int> stockpile;
-    private LinkedList<int> income;
-    private LinkedList<int> upkeep;
+    // resource at index 0 is common index 1 is less common (called Rare)
+    private List<int> stockpile;
+    private List<int> income;
+    private List<int> upkeep;
     private LinkedList<Unit> army;
     private LinkedList<Unit> garrison;
     private Faction faction;
@@ -35,14 +36,14 @@ public class Player : MonoBehaviour
     private void setBank()
     {
         // set starting resources: common first then rare
-        stockpile.AddFirst(0);
-        stockpile.AddLast(0);
+        stockpile[0] = 200;
+        stockpile[1] = 100;
         // set base income: common first then rare
-        income.AddFirst(0);
-        income.AddLast(0);
+        income[0] = 10;
+        income[1] = 5;
         // set base upkeep: common first then rare
-        upkeep.AddFirst(0);
-        upkeep.AddLast(0);
+        upkeep[0] = 0;
+        upkeep[1] = 0;
         // set bankrupt status
         bankrupt = false;
     }
@@ -50,11 +51,11 @@ public class Player : MonoBehaviour
     //Handle income and upkeep for the player will declare bankrupt if less than 0 of a single resource
     private void finances()
     {
-        int common_change = (income.First.Value - upkeep.First.Value);
-        int rare_change = (income.Last.Value - upkeep.Last.Value);
-        stockpile.First.Value += common_change;
-        stockpile.Last.Value += rare_change;
-        if (stockpile.First.Value < 0 || stockpile.Last.Value < 0)
+        int common_change = (income[0] - upkeep[0]);
+        int rare_change = (income[1] - upkeep[1]);
+        stockpile[0] += common_change;
+        stockpile[1] += rare_change;
+        if (stockpile[0] < 0 || stockpile[1] < 0)
         {
             bankrupt = true;
         }
@@ -65,23 +66,23 @@ public class Player : MonoBehaviour
     // modify common income
     public void changeIncomeCommon(int gained)
     {
-        income.First.Value += gained;
+        income[0] += gained;
     }
     // modify rare income
     public void changeIncomeRare(int gained)
     {
-        income.Last.Value += gained;
+        income[1] += gained;
     }
 
     // modify common upkeep
     public void changeUpkeepCommon(int loss)
     {
-        upkeep.Last.Value += loss;
+        upkeep[0] += loss;
     }
     // modify rare upkeep
     public void changeUpkeepRare(int loss)
     {
-        upkeep.Last.Value += loss;
+        upkeep[1] += loss;
     }
 
     // tell others if Bankrupt
@@ -95,7 +96,8 @@ public class Player : MonoBehaviour
     {
         foreach (Unit x in army)
         {
-            x.charge(target);
+            LinkedList<(int, int)> targets = target.locateAssets();
+            x.attack(targets);
         }
     }
     // a way to check if the player has lost
@@ -122,6 +124,10 @@ public class Player : MonoBehaviour
     {
         if (mineList.Contains(mine))
         {
+            (int, int) losses = mine.showIncome();
+            losses = (losses.Item1 * -1, losses.Item2 * -1);
+            int check = changeResourcesIncome(losses);
+            if (check == 0) Debug.Log("a mine had no income!");
             mineList.Remove(mine);
         }
         else
@@ -134,10 +140,18 @@ public class Player : MonoBehaviour
     {
         if (army.Contains(soldier))
         {
+            (int, int) upkeep = soldier.showUpkeep();
+            upkeep = (upkeep.Item1 * -1, upkeep.Item2 * -1);
+            int check = changeResourcesUpkeep(upkeep);
+            if (check == 0) Debug.Log("A Unit has 0 upkeep");
             army.Remove(soldier);
         }
         else if (garrison.Contains(soldier))
         {
+            (int, int) upkeep = soldier.showUpkeep();
+            upkeep = (upkeep.Item1 * -1, upkeep.Item2 * -1);
+            int check = changeResourcesUpkeep(upkeep);
+            if (check == 0) Debug.Log("A Unit has 0 upkeep");
             garrison.Remove(soldier);
         }
         else
@@ -149,23 +163,57 @@ public class Player : MonoBehaviour
     // when a spawner is created add it to the list
     public void gainSpawner(Spawner_Controls building)
     {
-        spawnerList.AddFirst(building);
+        (int, int) cost = building.showCost();
+        if (Math.Abs(cost.Item1) > 0)
+        {
+            this.stockpile.First.Value += (cost.Item1);
+    
+        }
+        else if (Math.Abs(cost.Item2) > 0)
+        {
+            this.stockpile.Last.Value += (cost.Item2);
+         
+        }
+        else Debug.Log("spawner has 0 cost");
+            spawnerList.AddFirst(building);
     }
 
     // when a mine is added, add it to the list
     public void gainMine(Mine_Controls building)
     {
+        (int, int) cost = building.showCost();
+        if (Math.Abs(cost.Item1) > 0)
+        {
+            this.stockpile.First.Value += (cost.Item1);
+
+        }
+        else if (Math.Abs(cost.Item2) > 0)
+        {
+            this.stockpile.Last.Value += (cost.Item2);
+
+        }
+        else Debug.Log("mine has 0 cost");
+
+        (int, int) ni = building.showIncome();
+        int check = changeResourcesIncome(ni);
+        if(check == 0 ) Debug.Log("Mine gained with no income!");
         mineList.AddFirst(building);
     }
 
     // when an attack is spawned add it to the army list
     public void gainAttacker(Unit soldier)
     {
+        (int, int) upkeep = soldier.showUpkeep();
+        int check = changeResourcesUpkeep(upkeep);
+        if (check == 0) Debug.Log("a Unit has no upkeep!");
         army.AddFirst(soldier);
     }
     // when an defender is spawned add it to the garrison list
     public void gainDefender(Unit soldier)
     {
+        (int, int) upkeep = soldier.showUpkeep();
+        int check = changeResourcesUpkeep(upkeep);
+        if (check == 0) Debug.Log("a Unit has no upkeep!");
         garrison.AddFirst(soldier);
     }
     // finds the location of all buildings and units and returns a linked list of the cordinates
@@ -190,6 +238,38 @@ public class Player : MonoBehaviour
             targets.AddFirst(building.findLocation());
         }
         return targets;
+    }
+
+    // takes the resources from something and chages the income
+    int changeResourcesIncome((int,int) nr)
+    {
+        if (Math.Abs(nr.Item1) > 0)
+        {
+            this.changeIncomeCommon(nr.Item1);
+            return 1;
+        }
+        else if (Math.Abs(nr.Item2) > 0)
+        {
+            this.changeIncomeRare(nr.Item2);
+            return 1;
+        }
+        else return 0;
+    }
+
+    // takes the resources from something and changes the upkeep
+    int changeResourcesUpkeep((int, int) nr)
+    {
+        if (Math.Abs(nr.Item1) > 0)
+        {
+            this.changeUpkeepCommon(nr.Item1);
+            return 1;
+        }
+        else if (Math.Abs(nr.Item2) > 0)
+        {
+            this.changeUpkeepRare(nr.Item2);
+            return 1;
+        }
+        else return 0;
     }
 
 }

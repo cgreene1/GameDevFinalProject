@@ -21,8 +21,10 @@ public class Spawner_Controls : Building_Functionality
     {
         while (active)
         {
+            /*
             ResourceCheck();
             // timer here to call spawn
+            */
 
         }
 

@@ -23,6 +23,9 @@ public class Spawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(isOffense){
+            //do stuff here to set units to be offensive
+        }
         map = GameObject.Find("Map").GetComponent<Map>();
         render = gameObject.GetComponent<Renderer>();
         trans = gameObject.GetComponent<Transform>();
@@ -38,10 +41,9 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    public void setVals(bool off, int spawn, GameObject pre){
+    public void setVals(bool off, GameObject pre){
         unitPrefab = pre;
         isOffense = off;
-        spawnDelay = spawn;
     }
 
     public (int row, int col) getLocation(){
@@ -55,4 +57,6 @@ public class Spawner : MonoBehaviour
     void spawn(){
         Instantiate(unitPrefab, trans);
     }
+
+    
 }

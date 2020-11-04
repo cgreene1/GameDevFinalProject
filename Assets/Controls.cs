@@ -6,6 +6,7 @@ public class Controls : MonoBehaviour
 {
     Map map;
     bool isOffense;
+    bool isRare;
     GameObject unitPrefab;
     GameObject spawnerPrefab;
     GameObject minePrefab;
@@ -29,12 +30,12 @@ public class Controls : MonoBehaviour
 
     //creates a spawner prefab and adds it to the map, returns null if cannot be placed
     //should be called AFTER setting things with buttons
-    public GameObject buildSpawnerPrefab(bool isOffense, int spawnDelay, GameObject unitPrefab){
+    public GameObject buildSpawnerPrefab(){
         Renderer r = spawnerPrefab.GetComponent<Renderer>();
         (int sizex, int sizey) = map.tileScale(r);
         if(map.canPlace(row, col, sizex, sizey)){
             Spawner spawnScript = spawnerPrefab.GetComponent<Spawner>();
-            spawnScript.setVals(isOffense, spawnDelay, unitPrefab);
+            spawnScript.setVals(isOffense, unitPrefab);
             return map.addBuilding(spawnerPrefab, row, col);
         }
         return null;
@@ -43,7 +44,7 @@ public class Controls : MonoBehaviour
 
     //creates a mine prefab and adds it to the map, returns null if cannot be placed
     //should be called AFTER setting things with buttons
-    public GameObject buildMinePrefab(bool isRare){
+    public GameObject buildMinePrefab(){
         Renderer r = minePrefab.GetComponent<Renderer>();
         (int sizex, int sizey) = map.tileScale(r);
         if(map.canPlace(row, col, sizex, sizey)){
@@ -64,5 +65,9 @@ public class Controls : MonoBehaviour
 
     public void setOffense(bool isOff){
         isOffense = isOff;
+    }
+
+    public void setRarity(bool rare){
+        isRare = rare;
     }
 }

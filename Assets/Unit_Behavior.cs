@@ -46,7 +46,7 @@ public class UnitBehavior : MonoBehaviour
             hit(target);
     }
 
-    void getHit(int dmg){
+    private void getHit(int dmg){
         health -= dmg;
     }
 
@@ -75,14 +75,14 @@ public class UnitBehavior : MonoBehaviour
         target = closestEnemy;
     }
 
-    private void changeUpkeep(){
+    public void changeUpkeep(){
         upkeep.First.Value *= -1;
         upkeep.Last.Value *= -1;
     }
 
     public void dies(){
-        changeUpkeep; //player would call += unit.upkeep.First.Value & unit.upkeep.Last.Value
-        Player.loseUnit(gameObject);
+        changeUpkeep;
+        Player.loseUnit(gameObject); //player would call += unit.upkeep.First.Value & unit.upkeep.Last.Value
         Destroy(gameObject);
     }
 }

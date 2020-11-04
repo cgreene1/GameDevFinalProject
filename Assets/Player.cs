@@ -143,7 +143,7 @@ public class Player : MonoBehaviour
         }
     }
     // when a attacker unit is destroyed remove it from this list
-    public void loseUnit(Unit soldier)
+    public static void loseUnit(GameObject soldier)
     {
         if (army.Contains(soldier))
         {

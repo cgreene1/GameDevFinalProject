@@ -19,9 +19,14 @@ public class Player : MonoBehaviour
     private Faction faction;
     private bool bankrupt;
     private bool human;
+
+    GameObject spawner1;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        spawner1 = faction.getSpawnPrefab();
         setBank();
     }
 
@@ -91,13 +96,13 @@ public class Player : MonoBehaviour
     }
 
     // tell all offensive units to attack target player!
-    public void charge(Player target)
-    {
-        foreach (Unit x in army)
-        {
-            x.charge(target);
-        }
-    }
+    // public void charge(Player target)
+    // {
+    //     foreach (Unit x in army)
+    //     {
+    //         x.charge(target);
+    //     }
+    // }
     // a way to check if the player has lost
     public bool lost()
     {
@@ -169,28 +174,28 @@ public class Player : MonoBehaviour
         garrison.AddFirst(soldier);
     }
     // finds the location of all buildings and units and returns a linked list of the cordinates
-    public LinkedList<(int,int)> locateAssets()
-    {
-        LinkedList<(int,int)> targets;
+    // public LinkedList<(int,int)> locateAssets()
+    // {
+    //     LinkedList<(int,int)> targets;
 
-        foreach (unit soldier in army)
-        {
-            targets.AddFirst(soldier.findLocation());
-        }
-        foreach (Unit soldier in garrison)
-        {
-            targets.AddFirst(soldier.findLocation());
-        }
-        foreach (Spawner_Controls building in spawnerList)
-        {
-            targets.AddFirst(building.findLocation());
-        }
-        foreach (Mine_Controls building in mineList)
-        {
-            targets.AddFirst(building.findLocation());
-        }
-        return targets;
-    }
+    //     foreach (unit soldier in army)
+    //     {
+    //         targets.AddFirst(soldier.findLocation());
+    //     }
+    //     foreach (Unit soldier in garrison)
+    //     {
+    //         targets.AddFirst(soldier.findLocation());
+    //     }
+    //     foreach (Spawner_Controls building in spawnerList)
+    //     {
+    //         targets.AddFirst(building.findLocation());
+    //     }
+    //     foreach (Mine_Controls building in mineList)
+    //     {
+    //         targets.AddFirst(building.findLocation());
+    //     }
+    //     return targets;
+    // }
 
 }
 

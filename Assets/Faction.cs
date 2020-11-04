@@ -6,7 +6,12 @@ public class Faction : MonoBehaviour
 {
     private LinkedList<Unit> roster;
     private LinkedList<Building_Functionality> buildings;
+
     private string whichFaction;
+    private GameObject[] unitPrefabs;
+    [SerializeField] GameObject[] spawnerPrefabs;
+    private LinkedList<GameObject> minePrefabs;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +23,6 @@ public class Faction : MonoBehaviour
     {
         
     }
-
     // call at start to create proper faction for player
     public Faction SetFaction(bool player)
     {
@@ -73,4 +77,8 @@ public class Faction : MonoBehaviour
 
     }
 
+
+    public GameObject getSpawnPrefab(){
+        return spawnerPrefabs[0];
+    }
 }

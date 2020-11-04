@@ -4,21 +4,24 @@ using UnityEngine;
 
 public class UnitBehavior : MonoBehaviour
 {
-    public float speed = 2f;
+    private float health;
+    private float speed;
+    private float range;     //adjusts circlecast radius
+    private float attackPower;
+    private GameObject target;
     public (int, int) upkeep;
-    public int health;
-    public float range;     //adjusts circlecast radius
-    public int attackPower;
-    GameObject target;
 
 
     // Start is called before the first frame update
     void Awake()
     {
-        upkeep = (1,1);
-        health = 100;
-        target = null;
+        health = 100f;
+        speed = 2f;
         range = 1f;
+        attackPower = 5f;
+        target = null;
+
+        upkeep = (1, 1);
     }
 
     // Update is called once per frame

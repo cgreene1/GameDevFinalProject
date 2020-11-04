@@ -37,10 +37,7 @@ public class Map : MonoBehaviour
     }
 
 //check if building can be placed
-    bool canPlace(GameObject build){
-        Renderer r = build.GetComponent<Renderer>();
-        (int row, int col) = tilePosition(r);
-        (int sizecol, int sizerow) = tileScale(r);
+    public bool canPlace(int row, int col, int sizecol, int sizerow){
         for(int i=row; i<sizerow; i++){
             for(int j=col; j<sizecol; j++){
                 if(buildings[i,j] != null) return false;
@@ -48,6 +45,7 @@ public class Map : MonoBehaviour
         }
         return true;
     }
+
 
 
 
@@ -70,18 +68,21 @@ public class Map : MonoBehaviour
 //prefab for building should have spawner script with player-chosen params in it or mine script with all resource info
 //requires input for the position IN TILES of the spawner to be placed
     public GameObject addBuilding(GameObject prefab, int row, int col){
-        if(canPlace(prefab)){
-            Renderer r = prefab.GetComponent<Renderer>();
-            (int sizex, int sizey) = tileScale(r);
+        Renderer r = prefab.GetComponent<Renderer>();
+        (int sizex, int sizey) = tileScale(r);
+        if(canPlace( row,  col, sizex, sizey)){
             for(int i=row; i<sizey; i++){
                 for(int j=col; j<sizex; j++){
                     buildings[i,j] = prefab;
                 }
             }
-            return prefab;
+            GameObject newObj = Instantiate(prefab, new Vector3(col*tileSize, row*tileSize, 0) + Vector3.down, Quaternion.identity);
+            return newObj;
         }
         return null;
     }
+        
+    
 
 
 //removes a building from the map display

@@ -9,6 +9,8 @@ public class Spawner : MonoBehaviour
     private int maxHealth;
     private int currentHealth;
     private int resourceDrain;
+
+    private int timer;
     public GameObject unitPrefab;
     Transform trans;
     Faction faction;
@@ -16,21 +18,28 @@ public class Spawner : MonoBehaviour
     Renderer render;
     Map map;
 
+    int population;
+
     // Start is called before the first frame update
     void Start()
     {
         map = GameObject.Find("Map").GetComponent<Map>();
         render = gameObject.GetComponent<Renderer>();
         trans = gameObject.GetComponent<Transform>();
+        population = 0;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        timer++;
+        if(timer > spawnDelay){
+            spawn();
+        }
     }
 
-    public void setVals(bool off, int spawn){
+    public void setVals(bool off, int spawn, GameObject pre){
+        unitPrefab = pre;
         isOffense = off;
         spawnDelay = spawn;
     }
@@ -41,5 +50,9 @@ public class Spawner : MonoBehaviour
 
     public (int x, int y) getSize(){
         return map.tileScale(render);
+    }
+
+    void spawn(){
+        Instantiate(unitPrefab, trans);
     }
 }

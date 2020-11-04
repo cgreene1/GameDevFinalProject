@@ -9,12 +9,15 @@ public class Mine : MonoBehaviour
     Renderer render;
     Map map;
 
+    bool isRare;
+
     // Start is called before the first frame update
     void Start()
     {
         map = GameObject.Find("Map").GetComponent<Map>();
         render = gameObject.GetComponent<Renderer>();
         trans = gameObject.GetComponent<Transform>();
+        isRare = false;
     }
 
     // Update is called once per frame
@@ -29,5 +32,9 @@ public class Mine : MonoBehaviour
 
     public (int x, int y) getSize(){
         return map.tileScale(render);
+    }
+
+    public void setRare(bool rare){
+        isRare = rare;
     }
 }

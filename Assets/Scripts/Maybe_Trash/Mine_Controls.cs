@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Mine_Controls : Building_Functionality
-{
+{ 
+/*
+
+
     // Start is called before the first frame update
 
     // Type of resource
@@ -34,4 +37,5 @@ public class Mine_Controls : Building_Functionality
     {
         return income;
     }
+*/
 }

@@ -7,10 +7,10 @@ using System.Runtime.CompilerServices;
 using UnityEditor.U2D.Common;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player_controls : MonoBehaviour
 {
-    private LinkedList<Spawner_Controls> spawnerList;
-    private LinkedList<Mine_Controls> mineList;
+    private LinkedList<Spawner> spawnerList;
+    private LinkedList<Mine> mineList;
     // resource at index 0 is common index 1 is less common (called Rare)
     private List<int> stockpile;
     private List<int> income;
@@ -29,6 +29,8 @@ public class Player : MonoBehaviour
     {
         spawner1 = faction.getSpawnPrefab();
         setBank();
+        army = new LinkedList<Unit>();
+        garrison = new LinkedList<Unit>();
     }
 
     // Update is called once per frame
@@ -98,12 +100,12 @@ public class Player : MonoBehaviour
 
     // tell all offensive units to attack target player!
 
-    public void charge(Player target)
+    public void charge(Player_controls target)
     {
         foreach (Unit x in army)
         {
             LinkedList<(int, int)> targets = target.locateAssets();
-            x.attack(targets);
+           // x.attack(targets);
         }
     }
 
@@ -114,7 +116,7 @@ public class Player : MonoBehaviour
     }
 
     // when a spawner is destoryed remove it from the list might use lost
-    public void loseSpawner(Spawner_Controls building)
+    public void loseSpawner(Spawner building)
     {
         if (spawnerList.Contains(building))
         {
@@ -127,7 +129,7 @@ public class Player : MonoBehaviour
     }
 
     // when a mine is destroyed remove it from the list, Income should be modififed by the mine
-    public void loseMine(Mine_Controls mine)
+    public void loseMine(Mine mine)
     {
         if (mineList.Contains(mine))
         {
@@ -143,13 +145,14 @@ public class Player : MonoBehaviour
         }
     }
     // when a attacker unit is destroyed remove it from this list
-    public static void loseUnit(GameObject soldier)
+    public void LoseUnit(Unit soldier)
     {
+        
         if (army.Contains(soldier))
         {
             (int, int) upkeep = soldier.showUpkeep();
             upkeep = (upkeep.Item1 * -1, upkeep.Item2 * -1);
-            int check = changeResourcesUpkeep(upkeep);
+            int check = changeResourcesIncome(upkeep);
             if (check == 0) Debug.Log("A Unit has 0 upkeep");
             army.Remove(soldier);
         }
@@ -157,7 +160,7 @@ public class Player : MonoBehaviour
         {
             (int, int) upkeep = soldier.showUpkeep();
             upkeep = (upkeep.Item1 * -1, upkeep.Item2 * -1);
-            int check = changeResourcesUpkeep(upkeep);
+            int check = changeResourcesIncome(upkeep);
             if (check == 0) Debug.Log("A Unit has 0 upkeep");
             garrison.Remove(soldier);
         }
@@ -168,17 +171,17 @@ public class Player : MonoBehaviour
     }
 
     // when a spawner is created add it to the list
-    public void gainSpawner(Spawner_Controls building)
+    public void gainSpawner(Spawner building)
     {
         (int, int) cost = building.showCost();
         if (Math.Abs(cost.Item1) > 0)
         {
-            this.stockpile.First.Value += (cost.Item1);
+            this.stockpile[0] += (cost.Item1);
     
         }
         else if (Math.Abs(cost.Item2) > 0)
         {
-            this.stockpile.Last.Value += (cost.Item2);
+            this.stockpile[1] += (cost.Item2);
          
         }
         else Debug.Log("spawner has 0 cost");
@@ -186,17 +189,17 @@ public class Player : MonoBehaviour
     }
 
     // when a mine is added, add it to the list
-    public void gainMine(Mine_Controls building)
+    public void gainMine(Mine building)
     {
         (int, int) cost = building.showCost();
         if (Math.Abs(cost.Item1) > 0)
         {
-            this.stockpile.First.Value += (cost.Item1);
+            this.stockpile[0] += (cost.Item1);
 
         }
         else if (Math.Abs(cost.Item2) > 0)
         {
-            this.stockpile.Last.Value += (cost.Item2);
+            this.stockpile[1] += (cost.Item2);
 
         }
         else Debug.Log("mine has 0 cost");
@@ -224,28 +227,30 @@ public class Player : MonoBehaviour
         garrison.AddFirst(soldier);
     }
     // finds the location of all buildings and units and returns a linked list of the cordinates
-    // public LinkedList<(int,int)> locateAssets()
-    // {
-    //     LinkedList<(int,int)> targets;
+     public LinkedList<(int,int)> locateAssets()
+     {
+         LinkedList<(int,int)> targets = new LinkedList<(int, int)>();
 
-    //     foreach (unit soldier in army)
-    //     {
-    //         targets.AddFirst(soldier.findLocation());
-    //     }
-    //     foreach (Unit soldier in garrison)
-    //     {
-    //         targets.AddFirst(soldier.findLocation());
-    //     }
-    //     foreach (Spawner_Controls building in spawnerList)
-    //     {
-    //         targets.AddFirst(building.findLocation());
-    //     }
-    //     foreach (Mine_Controls building in mineList)
-    //     {
-    //         targets.AddFirst(building.findLocation());
-    //     }
-    //     return targets;
-    // }
+         foreach (Unit soldier in army)
+         {
+             targets.AddFirst(soldier.findLocation());
+         }
+         foreach (Unit soldier in garrison)
+         {
+             targets.AddFirst(soldier.findLocation());
+         }
+         /*
+         foreach (Spawner building in spawnerList)
+         {
+             targets.AddFirst(building.findLocation());
+         }
+         foreach (Mine building in mineList)
+         {
+             targets.AddFirst(building.findLocation());
+         }
+         */
+         return targets;
+     }
 
     // takes the resources from something and chages the income
     int changeResourcesIncome((int,int) nr)

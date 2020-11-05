@@ -78,7 +78,18 @@ public class Unit : MonoBehaviour
     }
 
     public void dies(){
-        Player.loseUnit(gameObject); //player would call += 
+        Unit me = this;
+      //  Player_controls.LoseUnit(me); //player would call += 
         Destroy(gameObject);
+    }
+
+    public (int,int) showUpkeep()
+    {
+        return (0,0);
+    }
+    // TODO TODO
+    public (int,int) findLocation()
+    {
+        return (0, 0);
     }
 }

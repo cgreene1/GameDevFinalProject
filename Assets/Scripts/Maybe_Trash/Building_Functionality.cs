@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Building_Functionality : MonoBehaviour
 {
+    /*
     // private variables
     // Location;
     // Faction;
@@ -40,7 +41,7 @@ public abstract class Building_Functionality : MonoBehaviour
      * 
      * return owner;
      *} 
-    */
+    
 
 
     //define my own type for this?
@@ -50,5 +51,5 @@ public abstract class Building_Functionality : MonoBehaviour
         newUnit.transform.position = new Vector2(getLoc.position.x, getLoc.position.y);
 
     }
-
+    */
 }

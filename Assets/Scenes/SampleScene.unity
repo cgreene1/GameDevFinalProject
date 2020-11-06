@@ -3110,7 +3110,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Castle (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7157034656845269448, guid: 7323c6a3f25cc724098787246d92987c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7323c6a3f25cc724098787246d92987c, type: 3}
 --- !u!1 &810854089
 GameObject:
@@ -3267,7 +3268,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 856077224}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11500000, guid: 5c7148c1c96d4ed4b992e167ae08b07b, type: 3}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &856077224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3651,5 +3664,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Castle
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7157034656845269448, guid: 7323c6a3f25cc724098787246d92987c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6141833614372943481, guid: 7323c6a3f25cc724098787246d92987c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7323c6a3f25cc724098787246d92987c, type: 3}

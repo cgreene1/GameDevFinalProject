@@ -57,6 +57,7 @@ public class Spawner : MonoBehaviour
 
     void spawn(){
         Instantiate(unitPrefab, trans);
+        Debug.Log("spawning");
     }
 
     public (int, int) showCost()

@@ -20,12 +20,12 @@ public class PlaceBuilding : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        /*Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 spawnPos = new Vector2(Mathf.Round(mousePos.x), Mathf.Round(mousePos.y));
 
 	    if (Input.GetKeyDown("e") && isAnObjectSelected == false)
         {
-            GameObject newBuilding = Instantiate(selectableObjects[selectedObjectInArray], spawnPos, Quaternion.identity) as GameObject;
+            currentlySelectedObject = (GameObject)Instantiate(selectableObjects[selectedObjectInArray], spawnPos, Quaternion.identity);
             isAnObjectSelected = true;
         }
 
@@ -35,7 +35,7 @@ public class PlaceBuilding : MonoBehaviour {
             isAnObjectSelected = false;
             selectedObjectInArray = 0;
         }
-
+*/
         /*if (Input.GetAxis("Mouse ScrollWheel") > 0 && isAnObjectSelected == true)
         {
             selectedObjectInArray++;
@@ -60,5 +60,19 @@ public class PlaceBuilding : MonoBehaviour {
             Destroy(currentlySelectedObject);
             currentlySelectedObject = (GameObject)Instantiate(selectableObjects[selectedObjectInArray], spawnPos, Quaternion.identity);
         }*/
+    }
+
+    public void placeSpawn() {
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 spawnPos = new Vector2(Mathf.Round(mousePos.x), Mathf.Round(mousePos.y));
+            currentlySelectedObject = (GameObject)Instantiate(selectableObjects[selectedObjectInArray], spawnPos, Quaternion.identity);
+            isAnObjectSelected = true;
+
+        if (Input.GetMouseButtonDown(1) && isAnObjectSelected == true)
+        {
+            Destroy(currentlySelectedObject);
+            isAnObjectSelected = false;
+            selectedObjectInArray = 0;
+        }
     }
 }

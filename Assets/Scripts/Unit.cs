@@ -1,27 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    private float armour; 
+    private float ap;
+    private float numAttacks;
     private float health;
     private float speed;
     private float range;     //adjusts circlecast radius
-    private float attackPower;
+    private float damage;
     private GameObject target;
     private Unit enemyScript;
-    public (int, int) upkeep;
-
-
+    private (int, int) upkeep;
+    private Player_controls player;
+    private Map map;
+    private Renderer render;
     // Start is called before the first frame update
     void Awake()
     {
         health = 100f;
         speed = 2f;
         range = 1f;
-        attackPower = 5f;
+        damage = 5f;
+        armour = 1f;
+        ap = 1f;
+        numAttacks = 1f;
         target = null;
-
+        map = GameObject.Find("Map").GetComponent<Map>();
+        render = gameObject.GetComponent<Renderer>();
         upkeep = (1, 1);
     }
 
@@ -47,12 +56,26 @@ public class Unit : MonoBehaviour
             hit(target);
     }
 
-    private void getHit(float dmg){
-        health -= dmg;
+    private void getHit(Unit foe){
+        float effectiveArmour = armour - foe.showAP();
+        if(effectiveArmour < 0)
+        { 
+            effectiveArmour = 0f; 
+        }
+        float effectiveDmg = foe.showDmg() - effectiveArmour;
+        if(effectiveDmg < 0.5f)
+        {
+            effectiveDmg = 0.5f;
+        }
+        health -= (effectiveDmg * foe.showNumAttacks());
+        if(health <= 0)
+        {
+            dies();
+        }
     }
 
     public void hit(GameObject target){
-        enemyScript.getHit(attackPower);
+        enemyScript.getHit(this);
     }
 
     private void findClosest(){
@@ -78,18 +101,68 @@ public class Unit : MonoBehaviour
     }
 
     public void dies(){
-        Unit me = this;
-      //  Player_controls.LoseUnit(me); //player would call += 
+        player.LoseUnit(this);
         Destroy(gameObject);
     }
+
+    public void charge(LinkedList<(int, int)> targets)
+    {
+        (int, int) myLoc = findLocation();
+        (int,int) closest = targets.First.Value;
+        float closestDistance = Mathf.Sqrt((myLoc.Item1 - closest.Item1)^2 + (myLoc.Item2 - closest.Item2)^2);
+        foreach ((int, int) target in targets)
+        {
+            float newDistance = Mathf.Sqrt((myLoc.Item1 - target.Item1) ^ 2 + (myLoc.Item2 - target.Item2) ^ 2);
+            if(newDistance < closestDistance)
+            {
+                closestDistance = newDistance;
+                closest = target;
+            }
+        }
+        // move towards the target now please! then activate defensive funcitonality
+    }
+
 
     public (int,int) showUpkeep()
     {
         return (0,0);
     }
+
+    public float showArmour()
+    {
+        return armour;
+    }
+    public float showAP()
+    {
+        return ap;
+    }
+    public float showNumAttacks()
+    {
+        return numAttacks;
+    }
+    public float showDmg()
+    {
+        return damage;
+    }
+    public float showHealth()
+    {
+        return health;
+    }
+
+
     // TODO TODO
     public (int,int) findLocation()
     {
-        return (0, 0);
+        return map.tilePosition(render);
     }
+
+
+
+
+
+
+
+
+
+
 }

@@ -55,7 +55,7 @@ public class Unit : MonoBehaviour
         else
             hit(target);
     }
-
+    // you take take dmg
     private void getHit(Unit foe){
         float effectiveArmour = armour - foe.showAP();
         if(effectiveArmour < 0)
@@ -73,7 +73,7 @@ public class Unit : MonoBehaviour
             dies();
         }
     }
-
+    // you hit someone else
     public void hit(GameObject target){
         enemyScript.getHit(this);
     }
@@ -119,7 +119,10 @@ public class Unit : MonoBehaviour
                 closest = target;
             }
         }
+        Vector2 tmp = new Vector2(closest.Item1,closest.Item2);
         // move towards the target now please! then activate defensive funcitonality
+        transform.position = Vector2.MoveTowards(transform.position, tmp, speed * Time.deltaTime);
+        findClosest();
     }
 
 

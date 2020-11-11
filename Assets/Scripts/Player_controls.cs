@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using UnityEditor.U2D.Common;
+//using UnityEditor.U2D.Common;
 using UnityEngine;
 
 public class Player_controls : MonoBehaviour

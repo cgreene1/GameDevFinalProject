@@ -7,7 +7,7 @@ public class Manager : MonoBehaviour
 {
 
     Map map;
-    List<Player_controls> playerlist;
+    public List<Player_controls> playerlist;
 
     // Start is called before the first frame update
     void Start()
@@ -31,8 +31,20 @@ public class Manager : MonoBehaviour
         for(int i = 0; i < size; i++)
         {
             Player_controls np = new Player_controls();
+            np.god = this;
             if (i == 0) np.setHuman(true);
             playerlist[i] = np;
         }
     }
+    // basic two player funciton to give the other player.
+    public Player_controls givePlayer(Player_controls safe)
+    {
+        if (playerlist[0] != safe)
+        {
+            return playerlist[0];
+        }
+        else return playerlist[1];
+    }
+
+
 }

@@ -9,6 +9,7 @@ using UnityEngine;
 
 public class Player_controls : MonoBehaviour
 {
+    public Manager man;
     private LinkedList<Spawner> spawnerList;
     private LinkedList<Mine> mineList;
     // resource at index 0 is common index 1 is less common (called Rare)
@@ -19,6 +20,7 @@ public class Player_controls : MonoBehaviour
     private LinkedList<Unit> garrison;
     private Faction faction;
     private bool bankrupt;
+    // bool value to turn off AI controls
     private bool human;
     // bool values to see if income - upkeep is postive or negative
     private bool posCommonIn;
@@ -59,8 +61,15 @@ public class Player_controls : MonoBehaviour
             if(!posCommonIn && !posRareIn && bankrupt)
             {
                 // call charge and pick any opponent
+                Player_controls target = man.givePlayer(this);
+                charge(target);
             }
-
+            // check to see if we have a arge enough army to attack someone
+            if(army.Count >= 10)
+            {
+                Player_controls target = man.givePlayer(this);
+                charge(target);
+            }
         }
     }
     // function to see if a human is in control of this player

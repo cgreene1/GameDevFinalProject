@@ -31,6 +31,7 @@ public class Manager : MonoBehaviour
         for(int i = 0; i < size; i++)
         {
             Player_controls np = new Player_controls();
+            if (i == 0) np.setHuman(true);
             playerlist[i] = np;
         }
     }

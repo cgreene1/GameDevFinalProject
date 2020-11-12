@@ -20,13 +20,16 @@ public class Player_controls : MonoBehaviour
     private Faction faction;
     private bool bankrupt;
     private bool human;
-
+    // bool values to see if income - upkeep is postive or negative
+    private bool posCommonIn;
+    private bool posRareIn;
     GameObject spawner1;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        human = false;
         spawner1 = faction.getSpawnPrefab();
         setBank();
         army = new LinkedList<Unit>();
@@ -34,9 +37,36 @@ public class Player_controls : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         finances();
+        // AI behaviour
+        if (!human)
+        {
+            // check to see if AI can place a building
+            Spawner test = spawner1.GetComponent<Spawner>();
+            if (canAfford(test.showCost())){
+                // check to see if income is postive
+                if(posCommonIn && posRareIn)
+                {
+                    // build a spawner (you can afford to build it so do it) TODO
+                } else
+                {
+                    // build a mine (since you have a negative income you need more income) TODO
+                }
+            }
+            // check to see if we need to attack (for income reasons that is you have a negative income and are bankrupt)
+            if(!posCommonIn && !posRareIn && bankrupt)
+            {
+                // call charge and pick any opponent
+            }
+
+        }
+    }
+    // function to see if a human is in control of this player
+    public void setHuman(bool check)
+    {
+        if (check) { human = true; }
     }
 
     // set default values for income upkeep and stockpile
@@ -62,6 +92,8 @@ public class Player_controls : MonoBehaviour
         int rare_change = (income[1] - upkeep[1]);
         stockpile[0] += common_change;
         stockpile[1] += rare_change;
+        if (common_change > 0) { posCommonIn = true; } else posCommonIn = false;
+        if (rare_change > 0) { posRareIn = true; } else posRareIn = false;
         if (stockpile[0] < 0 || stockpile[1] < 0)
         {
             bankrupt = true;
@@ -282,6 +314,17 @@ public class Player_controls : MonoBehaviour
             return 1;
         }
         else return 0;
+    }
+
+
+    // for the Ai, check if you can afford a building
+    private bool canAfford((int,int) cost)
+    {
+        if (stockpile[0] >= cost.Item1 && stockpile[1] >= cost.Item2)
+        {
+            return true;
+        }
+        else return false;
     }
 
 }

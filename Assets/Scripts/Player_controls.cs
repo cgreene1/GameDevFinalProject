@@ -26,7 +26,7 @@ public class Player_controls : MonoBehaviour
     private bool posCommonIn;
     private bool posRareIn;
     GameObject spawner1;
-
+    private bool behaving;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +36,7 @@ public class Player_controls : MonoBehaviour
         setBank();
         army = new LinkedList<Unit>();
         garrison = new LinkedList<Unit>();
+        behaving = false;
     }
 
     // Update is called once per frame
@@ -43,35 +44,53 @@ public class Player_controls : MonoBehaviour
     {
         finances();
         // AI behaviour
-        if (!human)
+        if (!human && !behaving)
         {
-            // check to see if AI can place a building
-            Spawner test = spawner1.GetComponent<Spawner>();
-            if (canAfford(test.showCost())){
-                // check to see if income is postive
-                if(posCommonIn && posRareIn)
-                {
-                    // build a spawner (you can afford to build it so do it) TODO
-                } else
-                {
-                    // build a mine (since you have a negative income you need more income) TODO
-                }
-            }
-            // check to see if we need to attack (for income reasons that is you have a negative income and are bankrupt)
-            if(!posCommonIn && !posRareIn && bankrupt)
-            {
-                // call charge and pick any opponent
-                Player_controls target = man.givePlayer(this);
-                charge(target);
-            }
-            // check to see if we have a arge enough army to attack someone
-            if(army.Count >= 10)
-            {
-                Player_controls target = man.givePlayer(this);
-                charge(target);
-            }
+            behaving = true;
+            InvokeRepeating("AIBehaviour", 2f, 5f);
         }
     }
+
+    private void AIBehaviour()
+    {
+        // check to see if AI can place a building
+        Spawner test = spawner1.GetComponent<Spawner>();
+        if (canAfford(test.showCost()))
+        {
+            // check to see if income is postive
+            if (posCommonIn && posRareIn)
+            {
+                // build a spawner (you can afford to build it so do it) TODO  
+                // set spawn near the other spawners
+                bool flag = true;
+                System.Random random = new System.Random();
+                int ran = random.Next(0,spawnerList.Count);
+                Spawner newSpawner = new Spawner();
+                Transform newTransform = newSpawner.GetComponent<Transform>();
+                
+            }
+            else
+            {
+                // build a mine (since you have a negative income you need more income) TODO
+            }
+        }
+        // check to see if we need to attack (for income reasons that is you have a negative income and are bankrupt)
+        if (!posCommonIn && !posRareIn && bankrupt)
+        {
+            // call charge and pick any opponent
+            Player_controls target = man.givePlayer(this);
+            charge(target);
+        }
+        // check to see if we have a arge enough army to attack someone
+        if (army.Count >= 10)
+        {
+            Player_controls target = man.givePlayer(this);
+            charge(target);
+        }
+    }
+
+
+
     // function to see if a human is in control of this player
     public void setHuman(bool check)
     {

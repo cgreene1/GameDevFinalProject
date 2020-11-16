@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Faction : MonoBehaviour
+public class Faction
 {
     private LinkedList<Unit> roster;
     private LinkedList<Building_Functionality> buildings;
@@ -12,17 +12,6 @@ public class Faction : MonoBehaviour
     [SerializeField] GameObject[] spawnerPrefabs;
     private LinkedList<GameObject> minePrefabs;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     // call at start to create proper faction for player
     public Faction SetFaction(bool player)
     {

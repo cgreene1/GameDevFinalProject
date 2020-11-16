@@ -12,9 +12,9 @@ public class Player_controls : MonoBehaviour
     private LinkedList<Spawner> spawnerList;
     private LinkedList<Mine> mineList;
     // resource at index 0 is common index 1 is less common (called Rare)
-    private List<int> stockpile;
-    private List<int> income;
-    private List<int> upkeep;
+    private int[] stockpile;
+    private int[] income;
+    private int[] upkeep;
     private LinkedList<Unit> army;
     private LinkedList<Unit> garrison;
     private Faction faction;
@@ -25,9 +25,13 @@ public class Player_controls : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        spawner1 = faction.getSpawnPrefab();
+        stockpile = new int[2];
+        income = new int[2];
+        upkeep = new int[2];
+        //faction = new Faction();
+       // spawner1 = faction.getSpawnPrefab();
         setBank();
         army = new LinkedList<Unit>();
         garrison = new LinkedList<Unit>();
@@ -53,6 +57,9 @@ public class Player_controls : MonoBehaviour
         upkeep[1] = 0;
         // set bankrupt status
         bankrupt = false;
+        for(int i = 0; i <= 1; i++) {
+            Debug.Log(stockpile[0] + " " + income[0] + " " + upkeep[0]);
+        }
     }
 
     //Handle income and upkeep for the player will declare bankrupt if less than 0 of a single resource
@@ -284,5 +291,20 @@ public class Player_controls : MonoBehaviour
         else return 0;
     }
 
+    //show income function for gui
+    public int showCommonIncome() {
+        return income[0]-upkeep[0];
+    }
+    //show income function for gui
+    public int showRareIncome() {
+        return income[1]-upkeep[1];
+    }
+    //gui layer to show resources
+    public void OnGUI() {
+        GUI.Label(new Rect(10,10,10000,20), "Common Income: " + (showCommonIncome()).ToString());
+        GUI.Label(new Rect(10,-1,10000,20), "Rare Income: " + (showRareIncome()).ToString());
+        GUI.Label(new Rect(10,20,10000,20), "Upkeep: " + upkeep[0].ToString());
+        GUI.Label(new Rect(10,30,10000,20), "StockPile: " + stockpile[0].ToString());
+    }
 }
 

@@ -27,10 +27,12 @@ public class Player_controls : MonoBehaviour
     private bool posRareIn;
     GameObject spawner1;
     private bool behaving;
+    private Map map;
 
     // Start is called before the first frame update
     void Start()
     {
+        map = GameObject.Find("map").GetComponent<Map>();
         human = false;
         spawner1 = faction.getSpawnPrefab();
         setBank();
@@ -65,9 +67,15 @@ public class Player_controls : MonoBehaviour
                 bool flag = true;
                 System.Random random = new System.Random();
                 int ran = random.Next(0,spawnerList.Count);
-                Spawner newSpawner = new Spawner();
-                Transform newTransform = newSpawner.GetComponent<Transform>();
-                
+                (int col, int row) = map.getSize();
+                int randCol;
+                int randRow;
+                GameObject build;
+                do{
+                    randCol = random.Next(0, col);
+                    randRow = random.Next(0,row);
+                    build = map.addBuilding(spawner1, randRow, randCol);
+                }while(build is null);
             }
             else
             {

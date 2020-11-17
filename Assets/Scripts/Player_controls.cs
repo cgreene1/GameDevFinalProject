@@ -84,7 +84,7 @@ public class Player_controls : MonoBehaviour
                     buildingControls.setOffense(offense==1);
                     buildingControls.setUnitPrefab(randPrefab);
                     buildingControls.setSpawnLocation(randRow, randCol);
-                    build = buildingControls.buildSpawnerPrefab());
+                    build = buildingControls.buildSpawnerPrefab();
                 }while(build is null);
             }
             else

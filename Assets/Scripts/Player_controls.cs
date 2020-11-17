@@ -188,10 +188,13 @@ public class Player_controls : MonoBehaviour
 
     public void charge(Player_controls target)
     {
+        LinkedList<(int, int)> targets = target.locateAssets();
         foreach (Unit x in army)
         {
-            LinkedList<(int, int)> targets = target.locateAssets();
-           // x.attack(targets);
+            if (!x.showCharge())
+            {
+                x.charge(targets);
+            }
         }
     }
 

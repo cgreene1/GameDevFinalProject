@@ -17,6 +17,7 @@ public class Unit : MonoBehaviour
     private Unit enemyScript;
     private (int, int) upkeep;
     private Player_controls player;
+    private bool charging;
     private Map map;
     private Renderer render;
     // Start is called before the first frame update
@@ -158,6 +159,7 @@ public class Unit : MonoBehaviour
 
     public void charge(LinkedList<(int, int)> targets)
     {
+        charging = true;
         (int, int) myLoc = findLocation();
         (int,int) closest = targets.First.Value;
         float closestDistance = Mathf.Sqrt((myLoc.Item1 - closest.Item1)^2 + (myLoc.Item2 - closest.Item2)^2);
@@ -173,7 +175,6 @@ public class Unit : MonoBehaviour
         Vector2 tmp = new Vector2(closest.Item1,closest.Item2);
         // move towards the target now please! then activate defensive funcitonality
         transform.position = Vector2.MoveTowards(transform.position, tmp, speed * Time.deltaTime);
-        findClosest();
     }
 
 
@@ -203,6 +204,10 @@ public class Unit : MonoBehaviour
         return health;
     }
 
+    public bool showCharge()
+    {
+        return charging;
+    }
 
     // TODO TODO
     public (int,int) findLocation()

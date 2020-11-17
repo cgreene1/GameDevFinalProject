@@ -13,6 +13,7 @@ public class Unit : MonoBehaviour
     private float range;     //adjusts circlecast radius
     private float damage;
     private GameObject target;
+    private Vector2 camp;
     private Unit enemyScript;
     private (int, int) upkeep;
     private Player_controls player;
@@ -22,6 +23,8 @@ public class Unit : MonoBehaviour
     void Awake()
     {
         health = 100f;
+        target = null;
+        charging = false;
         speed = 2f;
         range = 1f;
         damage = 5f;
@@ -31,28 +34,75 @@ public class Unit : MonoBehaviour
         target = null;
         map = GameObject.Find("Map").GetComponent<Map>();
         render = gameObject.GetComponent<Renderer>();
+
         upkeep = (1, 1);
+
+        camp = new Vector2(Random.Range(-3f, -5f), Random.Range(-1f, 1f));
     }
 
+
     // Update is called once per frame
-    void FixedUpdate()
-    {
+    void FixedUpdate(){
+
+
         if(health <= 0){
             dies();
         }
-        else if(target == null)
-            findClosest();
-        else
-            attack();
+
+
+        if(gameObject.tag == "Player"){
+            //if a player unit is defending
+            if(!charging){
+                transform.position = Vector2.MoveTowards(transform.position, camp, speed * Time.deltaTime); //might need this in a coroutine
+            }
+
+            //if player unit is charging
+            else{
+                if(target == null){
+                    findClosest("Enemy");
+                }
+                //move towards target if its out of range
+                else if(Vector2.Distance(this.transform.position, target.transform.position) > range){
+                    transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+                    //Debug.Log("dist = " + Vector2.Distance(this.transform.position, target.transform.position));
+
+                }
+                //attack if it's in range
+                else if(Vector2.Distance(this.transform.position, target.transform.position) <= range){
+                    transform.position = this.transform.position;
+                    attack();
+                }
+            }
+        }
+
+        //if an enemy unit
+        else{
+            if(target == null){
+                    findClosest("Player");
+            }
+            //move towards target if its out of range
+            else if(Vector2.Distance(this.transform.position, target.transform.position) > range){
+                transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+                //Debug.Log("dist = " + Vector2.Distance(this.transform.position, target.transform.position));
+            }
+            //attack if it's in range
+            else if(Vector2.Distance(this.transform.position, target.transform.position) <= range){
+                transform.position = this.transform.position;
+                attack();
+            }
+
+        }
         
     }
 
+
     //here is the shortest path to find the closest enemy when called
+    private void charge(){
+        if(gameObject.tag != "Enemy")
+            charging = true;
+    }
+
     private void attack(){
-        //move towards target if it's out of range
-        if(Vector3.Distance(transform.position, target.transform.position) > range)
-            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
-        else
             hit(target);
     }
     // you take take dmg
@@ -78,17 +128,17 @@ public class Unit : MonoBehaviour
         enemyScript.getHit(this);
     }
 
-    private void findClosest(){
+    private void findClosest(string str){
 
         List<GameObject> enemies = new List<GameObject>();
-        enemies.AddRange(GameObject.FindGameObjectsWithTag("enemy")); //change for AI
+        enemies.AddRange(GameObject.FindGameObjectsWithTag(str)); //change for AI
 
         //takes in all enemies on the field and calculates distance
         GameObject closestEnemy = null;
         float dist = Mathf.Infinity;
 
         foreach(GameObject enemy in enemies){
-            float enemyDist = Vector3.Distance(transform.position, enemy.transform.position);
+            float enemyDist = Vector2.Distance(transform.position, enemy.transform.position);
             if(enemyDist < dist){
 
                 closestEnemy = enemy;
@@ -101,6 +151,7 @@ public class Unit : MonoBehaviour
     }
 
     public void dies(){
+        Unit me = this;
         player.LoseUnit(this);
         Destroy(gameObject);
     }

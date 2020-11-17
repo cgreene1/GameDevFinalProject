@@ -4,39 +4,120 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using UnityEditor.U2D.Common;
+//using UnityEditor.U2D.Common;
 using UnityEngine;
 
 public class Player_controls : MonoBehaviour
 {
+    public Manager man;
     private LinkedList<Spawner> spawnerList;
     private LinkedList<Mine> mineList;
     // resource at index 0 is common index 1 is less common (called Rare)
-    private List<int> stockpile;
-    private List<int> income;
-    private List<int> upkeep;
+    private int[] stockpile;
+    private int[] income;
+    private int[] upkeep;
     private LinkedList<Unit> army;
     private LinkedList<Unit> garrison;
     private Faction faction;
     private bool bankrupt;
+    // bool value to turn off AI controls
     private bool human;
-
+    // bool values to see if income - upkeep is postive or negative
+    private bool posCommonIn;
+    private bool posRareIn;
     GameObject spawner1;
-
+    private bool behaving;
+    private Map map;
+    private Building_Controls buildingControls;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        map = GameObject.Find("map").GetComponent<Map>();
+        buildingControls = GameObject.Find("buildingControls").GetComponent<Building_Controls>();
+        human = false;
         spawner1 = faction.getSpawnPrefab();
+        stockpile = new int[2];
+        income = new int[2];
+        upkeep = new int[2];
+        //faction = new Faction();
+       // spawner1 = faction.getSpawnPrefab();
         setBank();
         army = new LinkedList<Unit>();
         garrison = new LinkedList<Unit>();
+        behaving = false;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         finances();
+        // AI behaviour
+        if (!human && !behaving)
+        {
+            behaving = true;
+            InvokeRepeating("AIBehaviour", 2f, 5f);
+        }
+    }
+
+    private void AIBehaviour()
+    {
+        // check to see if AI can place a building
+        Spawner test = spawner1.GetComponent<Spawner>();
+        if (canAfford(test.showCost()))
+        {
+            // check to see if income is postive
+            if (posCommonIn && posRareIn)
+            {
+                // build a spawner (you can afford to build it so do it) TODO  
+                // set spawn near the other spawners
+                bool flag = true;
+                System.Random random = new System.Random();
+                int ran = random.Next(0,spawnerList.Count);
+                (int col, int row) = map.getSize();
+                int randCol;
+                int randRow;
+                int offense;
+                GameObject randPrefab;
+                GameObject build;
+                GameObject[] unitPrefabs = faction.getUnitPrefabs();
+                do{
+                    randCol = random.Next(0, col);
+                    randRow = random.Next(0,row);
+                    offense = random.Next(0,2);
+                    randPrefab = unitPrefabs[random.Next(0,unitPrefabs.Length)];
+                    buildingControls.setOffense(offense==1);
+                    buildingControls.setUnitPrefab(randPrefab);
+                    buildingControls.setSpawnLocation(randRow, randCol);
+                    build = buildingControls.buildSpawnerPrefab();
+                }while(build is null);
+            }
+            else
+            {
+                // build a mine (since you have a negative income you need more income) TODO
+            }
+        }
+        // check to see if we need to attack (for income reasons that is you have a negative income and are bankrupt)
+        if (!posCommonIn && !posRareIn && bankrupt)
+        {
+            // call charge and pick any opponent
+            Player_controls target = man.givePlayer(this);
+            charge(target);
+        }
+        // check to see if we have a arge enough army to attack someone
+        if (army.Count >= 10)
+        {
+            Player_controls target = man.givePlayer(this);
+            charge(target);
+        }
+    }
+
+
+
+    // function to see if a human is in control of this player
+    public void setHuman(bool check)
+    {
+        if (check) { human = true; }
     }
 
     // set default values for income upkeep and stockpile
@@ -53,6 +134,9 @@ public class Player_controls : MonoBehaviour
         upkeep[1] = 0;
         // set bankrupt status
         bankrupt = false;
+        for(int i = 0; i <= 1; i++) {
+            Debug.Log(stockpile[0] + " " + income[0] + " " + upkeep[0]);
+        }
     }
 
     //Handle income and upkeep for the player will declare bankrupt if less than 0 of a single resource
@@ -62,6 +146,8 @@ public class Player_controls : MonoBehaviour
         int rare_change = (income[1] - upkeep[1]);
         stockpile[0] += common_change;
         stockpile[1] += rare_change;
+        if (common_change > 0) { posCommonIn = true; } else posCommonIn = false;
+        if (rare_change > 0) { posRareIn = true; } else posRareIn = false;
         if (stockpile[0] < 0 || stockpile[1] < 0)
         {
             bankrupt = true;
@@ -287,5 +373,31 @@ public class Player_controls : MonoBehaviour
         else return 0;
     }
 
+
+    // for the Ai, check if you can afford a building
+    private bool canAfford((int,int) cost)
+    {
+        if (stockpile[0] >= cost.Item1 && stockpile[1] >= cost.Item2)
+        {
+            return true;
+        }
+        else return false;
+    }
+
+    //show income function for gui
+    public int showCommonIncome() {
+        return income[0]-upkeep[0];
+    }
+    //show income function for gui
+    public int showRareIncome() {
+        return income[1]-upkeep[1];
+    }
+    //gui layer to show resources
+    public void OnGUI() {
+        GUI.Label(new Rect(10,10,10000,20), "Common Income: " + (showCommonIncome()).ToString());
+        GUI.Label(new Rect(10,-1,10000,20), "Rare Income: " + (showRareIncome()).ToString());
+        GUI.Label(new Rect(10,20,10000,20), "Upkeep: " + upkeep[0].ToString());
+        GUI.Label(new Rect(10,30,10000,20), "StockPile: " + stockpile[0].ToString());
+    }
 }
 

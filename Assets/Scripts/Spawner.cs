@@ -5,7 +5,7 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     private bool isOffense;
-    private int spawnDelay;
+    [SerializeField] int spawnDelay;
     private int maxHealth;
     private int currentHealth;
     private int resourceDrain;
@@ -39,6 +39,7 @@ public class Spawner : MonoBehaviour
         timer++;
         if(timer > spawnDelay){
             spawn();
+            timer = 0;
         }
     }
 
@@ -56,8 +57,7 @@ public class Spawner : MonoBehaviour
     }
 
     void spawn(){
-        Instantiate(unitPrefab, trans);
-        //Debug.Log("spawning");
+        Instantiate(unitPrefab, new Vector3(trans.position.x, trans.position.y+1, 0), Quaternion.identity);
     }
 
     public (int, int) showCost()

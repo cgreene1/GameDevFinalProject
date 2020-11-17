@@ -46,7 +46,10 @@ public class Map : MonoBehaviour
         return true;
     }
 
-
+    public (int col, int row) getSize(){
+        map.CompressBounds();
+        return (map.size.y, map.size.x);
+    }
 
 
  //check how many units are in a square (can be changed to just t/f if wanted), syntax works depends on return types of getLocation and getSize

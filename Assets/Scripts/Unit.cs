@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using System.Linq;
 
 public class Unit : MonoBehaviour
 {
@@ -15,11 +16,13 @@ public class Unit : MonoBehaviour
     private GameObject target;
     private Vector2 camp;
     private Unit enemyScript;
+    [SerializeField] int faction = 1;
     private (int, int) upkeep;
     private Player_controls player;
     private bool charging;
     private Map map;
     private Renderer render;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -131,9 +134,16 @@ public class Unit : MonoBehaviour
 
     private void findClosest(string str){
 
+        List<Unit> enemyScripts = new List<Unit>();
+        enemyScripts.AddRange(GameObject.FindObjectsOfType<Unit>().Where(u => u.getFaction() != faction)); //change for AI
         List<GameObject> enemies = new List<GameObject>();
-        enemies.AddRange(GameObject.FindGameObjectsWithTag(str)); //change for AI
 
+        /*
+        foreach(Unit enemy in enemyScripts){
+            enemies.Add(enemy.gameObject);
+        }
+        */
+        enemies.AddRange(GameObject.FindGameObjectsWithTag(str)); //change for AI
         //takes in all enemies on the field and calculates distance
         GameObject closestEnemy = null;
         float dist = Mathf.Infinity;
@@ -215,13 +225,9 @@ public class Unit : MonoBehaviour
         return map.tilePosition(render);
     }
 
-
-
-
-
-
-
-
+    public int getFaction(){
+        return faction;
+    }
 
 
 }

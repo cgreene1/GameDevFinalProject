@@ -10,7 +10,8 @@ public class Mine : MonoBehaviour
     Map map;
 
     bool isRare;
-
+    (int, int) income;
+    (int, int) cost;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +19,9 @@ public class Mine : MonoBehaviour
         render = gameObject.GetComponent<Renderer>();
         trans = gameObject.GetComponent<Transform>();
         isRare = false;
+        // set income
+        income = (1, 1);
+        cost = (1, 1);
     }
 
     // Update is called once per frame
@@ -36,5 +40,13 @@ public class Mine : MonoBehaviour
 
     public void setRare(bool rare){
         isRare = rare;
+    }
+    public (int,int) showIncome()
+    {
+        return income;
+    }
+    public (int,int) showCost()
+    {
+        return cost;
     }
 }

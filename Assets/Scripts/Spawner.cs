@@ -9,7 +9,7 @@ public class Spawner : MonoBehaviour
     private int maxHealth;
     private int currentHealth;
     private int resourceDrain;
-
+    private (int, int) cost;
     private int timer;
     public GameObject unitPrefab;
     Transform trans;
@@ -30,6 +30,7 @@ public class Spawner : MonoBehaviour
         render = gameObject.GetComponent<Renderer>();
         trans = gameObject.GetComponent<Transform>();
         population = 0;
+        cost = (1, 1);
     }
 
     // Update is called once per frame
@@ -59,5 +60,8 @@ public class Spawner : MonoBehaviour
         Instantiate(unitPrefab, new Vector3(trans.position.x, trans.position.y+1, 0), Quaternion.identity);
     }
 
-    
+    public (int, int) showCost()
+    {
+        return cost;
+    }
 }

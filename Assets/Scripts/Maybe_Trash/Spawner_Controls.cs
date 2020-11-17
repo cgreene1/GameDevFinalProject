@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,8 +21,10 @@ public class Spawner_Controls : Building_Functionality
     {
         while (active)
         {
+            *//*
             ResourceCheck();
             // timer here to call spawn
+            *//*
 
         }
 
@@ -34,13 +36,13 @@ public class Spawner_Controls : Building_Functionality
     }
     private void ResourceCheck()
     {
-        /*
+        *//*
           if(resources <= 0){
              active = false;
           }else{
                 active = true;
           }
-        */
+        *//*
     }
 
     public override void testing()
@@ -50,3 +52,4 @@ public class Spawner_Controls : Building_Functionality
 
 
 }
+*/

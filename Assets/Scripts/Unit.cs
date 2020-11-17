@@ -92,9 +92,6 @@ public class Unit : MonoBehaviour
     {
         return (0,0);
     }
-
-
-
     // TODO TODO
     public (int,int) findLocation()
     {

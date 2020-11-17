@@ -88,6 +88,7 @@ public class Player_controls : MonoBehaviour
                     randPrefab = unitPrefabs[random.Next(0,unitPrefabs.Length)];
                     buildingControls.setOffense(offense==1);
                     buildingControls.setUnitPrefab(randPrefab);
+                    buildingControls.setFaction(faction);
                     buildingControls.setSpawnLocation(randRow, randCol);
                     build = buildingControls.buildSpawnerPrefab();
                 }while(build is null);

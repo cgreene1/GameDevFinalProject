@@ -16,7 +16,7 @@ public class Unit : MonoBehaviour
     private GameObject target;
     private Vector2 camp;
     private Unit enemyScript;
-    [SerializeField] int faction;
+    [SerializeField] Faction faction;
     private (int, int) upkeep;
     private Player_controls player;
     private bool charging;
@@ -145,20 +145,23 @@ public class Unit : MonoBehaviour
         */
         enemies.AddRange(GameObject.FindGameObjectsWithTag(str)); //change for AI
         //takes in all enemies on the field and calculates distance
-        GameObject closestEnemy = null;
-        float dist = Mathf.Infinity;
+        if(enemies.Count > 0){
+            GameObject closestEnemy = null;
+            float dist = Mathf.Infinity;
 
-        foreach(GameObject enemy in enemies){
-            float enemyDist = Vector2.Distance(transform.position, enemy.transform.position);
-            if(enemyDist < dist){
+            foreach(GameObject enemy in enemies){
+                float enemyDist = Vector2.Distance(transform.position, enemy.transform.position);
+                if(enemyDist < dist){
 
-                closestEnemy = enemy;
-                dist = enemyDist;
+                    closestEnemy = enemy;
+                    dist = enemyDist;
+                }
             }
+
+            target = closestEnemy;
+            enemyScript = closestEnemy.GetComponent<Unit>();
         }
 
-        target = closestEnemy;
-        enemyScript = closestEnemy.GetComponent<Unit>();
     }
 
     public void dies(){
@@ -225,7 +228,7 @@ public class Unit : MonoBehaviour
         return map.tilePosition(render);
     }
 
-    public int getFaction(){
+    public Faction getFaction(){
         return faction;
     }
 

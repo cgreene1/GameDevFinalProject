@@ -10,6 +10,7 @@ public class Building_Controls : MonoBehaviour
     GameObject unitPrefab;
     GameObject spawnerPrefab;
     GameObject minePrefab;
+    Faction faction;
 
     int row, col;
 
@@ -35,7 +36,7 @@ public class Building_Controls : MonoBehaviour
         (int sizex, int sizey) = map.tileScale(r);
         if(map.canPlace(row, col, sizex, sizey)){
             Spawner spawnScript = spawnerPrefab.GetComponent<Spawner>();
-            spawnScript.setVals(isOffense, unitPrefab);
+            spawnScript.setVals(isOffense, unitPrefab, faction);
             return map.addBuilding(spawnerPrefab, row, col);
         }
         return null;
@@ -69,5 +70,9 @@ public class Building_Controls : MonoBehaviour
 
     public void setRarity(bool rare){
         isRare = rare;
+    }
+
+    public void setFaction(Faction fact){
+        faction = fact;
     }
 }

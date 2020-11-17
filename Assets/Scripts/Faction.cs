@@ -21,11 +21,12 @@ public class Faction
         if (player)
         {
             // ask player to choose which faction they what to play as
-            whichFaction = "holder"; // this is where there choice is recorded
+            whichFaction = "Player"; // this is where there choice is recorded
         }
         else
         {
             // have something set up earlier or random
+            whichFaction = "Enemy";
         }
         PopulateFaction();
         return nf;
@@ -73,5 +74,9 @@ public class Faction
 
     public GameObject[] getUnitPrefabs(){
         return unitPrefabs;
+    }
+
+    public string showName(){
+        return whichFaction;
     }
 }

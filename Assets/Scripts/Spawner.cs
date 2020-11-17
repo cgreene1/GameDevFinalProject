@@ -43,9 +43,10 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    public void setVals(bool off, GameObject pre){
+    public void setVals(bool off, GameObject pre, Faction fact){
         unitPrefab = pre;
         isOffense = off;
+        faction = fact;
     }
 
     public (int row, int col) getLocation(){
@@ -56,8 +57,11 @@ public class Spawner : MonoBehaviour
         return map.tileScale(render);
     }
 
+
     void spawn(){
-        Instantiate(unitPrefab, new Vector3(trans.position.x, trans.position.y+1, 0), Quaternion.identity);
+        GameObject newUnit = Instantiate(unitPrefab, new Vector3(trans.position.x, trans.position.y+1, 0), Quaternion.identity);
+        newUnit.tag = faction.showName();
+        Debug.Log(newUnit.tag);
     }
 
     public (int, int) showCost()

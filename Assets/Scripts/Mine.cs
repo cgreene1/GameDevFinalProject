@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Mine : MonoBehaviour
 {
-    Transform trans;
+    Transform trans, show;
     Faction faction;
     Renderer render;
     Map map;
@@ -27,7 +27,7 @@ public class Mine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public (int row, int col) getLocation(){

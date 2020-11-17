@@ -54,4 +54,13 @@ public class Manager : MonoBehaviour
         }
         
     }
+
+    public Player_controls givePlayer(Player_controls safe)
+    {
+        if (playerlist[0] != safe)
+        {
+            return playerlist[0].GetComponent<Player_controls>();
+        }
+        else return playerlist[1].GetComponent<Player_controls>();
+    }
 }

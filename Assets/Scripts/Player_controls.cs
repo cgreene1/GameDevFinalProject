@@ -91,6 +91,7 @@ public class Player_controls : MonoBehaviour
                     buildingControls.setSpawnLocation(randRow, randCol);
                     build = buildingControls.buildSpawnerPrefab();
                 }while(build is null);
+                gainSpawner(build.GetComponent<Spawner>());
             }
             else
             {

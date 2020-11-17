@@ -16,7 +16,7 @@ public class Unit : MonoBehaviour
     private GameObject target;
     private Vector2 camp;
     private Unit enemyScript;
-    [SerializeField] int faction = 1;
+    [SerializeField] int faction;
     private (int, int) upkeep;
     private Player_controls player;
     private bool charging;
@@ -38,7 +38,7 @@ public class Unit : MonoBehaviour
         target = null;
         map = GameObject.Find("Map").GetComponent<Map>();
         render = gameObject.GetComponent<Renderer>();
-
+        
         upkeep = (1, 1);
 
         camp = new Vector2(Random.Range(-3f, -5f), Random.Range(-1f, 1f));

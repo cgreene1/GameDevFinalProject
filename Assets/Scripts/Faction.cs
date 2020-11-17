@@ -81,4 +81,8 @@ public class Faction : MonoBehaviour
     public GameObject getSpawnPrefab(){
         return spawnerPrefabs[0];
     }
+
+    public GameObject[] getUnitPrefabs(){
+        return unitPrefabs;
+    }
 }

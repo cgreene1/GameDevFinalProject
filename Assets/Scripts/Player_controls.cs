@@ -28,11 +28,13 @@ public class Player_controls : MonoBehaviour
     GameObject spawner1;
     private bool behaving;
     private Map map;
+    private Building_Controls buildingControls;
 
     // Start is called before the first frame update
     void Start()
     {
         map = GameObject.Find("map").GetComponent<Map>();
+        buildingControls = GameObject.Find("buildingControls").GetComponent<Building_Controls>();
         human = false;
         spawner1 = faction.getSpawnPrefab();
         setBank();
@@ -70,11 +72,19 @@ public class Player_controls : MonoBehaviour
                 (int col, int row) = map.getSize();
                 int randCol;
                 int randRow;
+                int offense;
+                GameObject randPrefab;
                 GameObject build;
+                GameObject[] unitPrefabs = faction.getUnitPrefabs();
                 do{
                     randCol = random.Next(0, col);
                     randRow = random.Next(0,row);
-                    build = map.addBuilding(spawner1, randRow, randCol);
+                    offense = random.Next(0,2);
+                    randPrefab = unitPrefabs[random.Next(0,unitPrefabs.Length)];
+                    buildingControls.setOffense(offense==1);
+                    buildingControls.setUnitPrefab(randPrefab);
+                    buildingControls.setSpawnLocation(randRow, randCol);
+                    build = buildingControls.buildSpawnerPrefab());
                 }while(build is null);
             }
             else

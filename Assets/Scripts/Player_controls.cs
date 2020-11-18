@@ -33,19 +33,18 @@ public class Player_controls : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        map = GameObject.Find("map").GetComponent<Map>();
-        buildingControls = GameObject.Find("buildingControls").GetComponent<Building_Controls>();
+        map = GameObject.Find("Map").GetComponent<Map>();
+        buildingControls = GameObject.Find("BuildingControls").GetComponent<Building_Controls>();
         man = GameObject.Find("Manager").GetComponent<Manager>();
         human = false;
-        spawner1 = faction.getSpawnPrefab();
         stockpile = new int[2];
         income = new int[2];
         upkeep = new int[2];
-        //faction = new Faction();
-       // spawner1 = faction.getSpawnPrefab();
         setBank();
         army = new LinkedList<Unit>();
         garrison = new LinkedList<Unit>();
+        spawnerList = new LinkedList<Spawner>();
+        mineList = new LinkedList<Mine>();
         behaving = false;
     }
 
@@ -74,7 +73,7 @@ public class Player_controls : MonoBehaviour
                 // set spawn near the other spawners
                 bool flag = true;
                 System.Random random = new System.Random();
-                int ran = random.Next(0,spawnerList.Count);
+               // int ran = random.Next(0,spawnerList.Count);
                 (int col, int row) = map.getSize();
                 int randCol;
                 int randRow;
@@ -86,7 +85,8 @@ public class Player_controls : MonoBehaviour
                     randCol = random.Next(0, col);
                     randRow = random.Next(0,row);
                     offense = random.Next(0,2);
-                    randPrefab = unitPrefabs[random.Next(0,unitPrefabs.Length)];
+                    // randPrefab = unitPrefabs[random.Next(0,unitPrefabs.Length)];
+                    randPrefab = GameObject.Find("BuildingControls").GetComponent<Building_Controls>().getSpawner().GetComponent<Spawner>().showUnitPrefab();
                     buildingControls.setOffense(offense==1);
                     buildingControls.setUnitPrefab(randPrefab);
                     buildingControls.setFaction(faction);
@@ -121,6 +121,9 @@ public class Player_controls : MonoBehaviour
     public void setHuman(bool check)
     {
         if (check) { human = true; }
+        faction = new Faction();
+        faction.SetFaction(human);
+        spawner1 = faction.getSpawnPrefab();
     }
 
     // set default values for income upkeep and stockpile

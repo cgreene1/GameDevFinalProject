@@ -50,6 +50,13 @@ public class Manager : MonoBehaviour
             GameObject np = Instantiate(prefab);
             Debug.Log(i);
             playerlist.Add(np);
+            if(i == 0)
+            {
+                np.GetComponent<Player_controls>().setHuman(true);
+            } else
+            {
+                np.GetComponent<Player_controls>().setHuman(false);
+            }
             Debug.Log("A player was added");
         }
         

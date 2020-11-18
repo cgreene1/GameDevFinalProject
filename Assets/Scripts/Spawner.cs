@@ -68,4 +68,9 @@ public class Spawner : MonoBehaviour
     {
         return cost;
     }
+
+    public GameObject showUnitPrefab()
+    {
+        return unitPrefab;
+    }
 }

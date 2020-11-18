@@ -9,15 +9,16 @@ public class Faction
 
     private string whichFaction;
     private GameObject[] unitPrefabs;
-    [SerializeField] GameObject[] spawnerPrefabs;
+    private List<GameObject> spawnerPrefabs;
     private LinkedList<GameObject> minePrefabs;
 
     // call at start to create proper faction for player
     public Faction SetFaction(bool player)
     {
         // set faction here, eiter a button push for player or random for the AI
-        Faction nf = new Faction();
-
+        unitPrefabs = null;
+        spawnerPrefabs = new List<GameObject>();
+        spawnerPrefabs.Add(GameObject.Find("BuildingControls").GetComponent<Building_Controls>().getSpawner());
         if (player)
         {
             // ask player to choose which faction they what to play as
@@ -29,7 +30,7 @@ public class Faction
             whichFaction = "Enemy";
         }
         PopulateFaction();
-        return nf;
+        return this;
 
     }
 

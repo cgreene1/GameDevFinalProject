@@ -8,7 +8,7 @@ public class Building_Controls : MonoBehaviour
     bool isOffense;
     bool isRare;
     GameObject unitPrefab;
-    GameObject spawnerPrefab;
+    [SerializeField] GameObject spawnerPrefab;
     GameObject minePrefab;
     Faction faction;
 
@@ -35,7 +35,9 @@ public class Building_Controls : MonoBehaviour
         Renderer r = spawnerPrefab.GetComponent<Renderer>();
         (int sizex, int sizey) = map.tileScale(r);
         if(map.canPlace(row, col, sizex, sizey)){
+            Debug.Log("spanwning spawner");
             Spawner spawnScript = spawnerPrefab.GetComponent<Spawner>();
+            Debug.Log(spawnScript);
             spawnScript.setVals(isOffense, unitPrefab, faction);
             return map.addBuilding(spawnerPrefab, row, col);
         }
@@ -73,6 +75,12 @@ public class Building_Controls : MonoBehaviour
     }
 
     public void setFaction(Faction fact){
+        Debug.Log("FAction");
         faction = fact;
+    }
+
+    public GameObject getSpawner()
+    {
+        return spawnerPrefab;
     }
 }

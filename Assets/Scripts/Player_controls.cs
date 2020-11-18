@@ -35,6 +35,7 @@ public class Player_controls : MonoBehaviour
     {
         map = GameObject.Find("map").GetComponent<Map>();
         buildingControls = GameObject.Find("buildingControls").GetComponent<Building_Controls>();
+        man = GameObject.Find("Manager").GetComponent<Manager>();
         human = false;
         spawner1 = faction.getSpawnPrefab();
         stockpile = new int[2];
@@ -393,6 +394,10 @@ public class Player_controls : MonoBehaviour
     //show income function for gui
     public int showRareIncome() {
         return income[1]-upkeep[1];
+    }
+    //show faction
+    public Faction showFaction() {
+        return faction;
     }
     //gui layer to show resources
     public void OnGUI() {

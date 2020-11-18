@@ -3,11 +3,15 @@ using System.Collections;
 
 public class PlaceBuilding : MonoBehaviour {
 
+
     private int selectedObjectInArray;
     private GameObject currentlySelectedObject;
+    private Building_Controls buildingControls;
+    private Player_controls humanPlayer;
 
     [SerializeField]
-    private GameObject[] selectableObjects;
+    private GameObject unitPrefab; 
+
 
     private bool isAnObjectSelected = false;
 
@@ -15,58 +19,26 @@ public class PlaceBuilding : MonoBehaviour {
 	void Start ()
     {
         selectedObjectInArray = 0;
-	}
+        buildingControls = GameObject.Find("BuildingControls").GetComponent<Building_Controls>();
+        humanPlayer = GameObject.Find("Manager").GetComponent<Manager>().showHuman();
+
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        /*Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 spawnPos = new Vector2(Mathf.Round(mousePos.x), Mathf.Round(mousePos.y));
-
-	    if (Input.GetKeyDown("e") && isAnObjectSelected == false)
-        {
-            currentlySelectedObject = (GameObject)Instantiate(selectableObjects[selectedObjectInArray], spawnPos, Quaternion.identity);
-            isAnObjectSelected = true;
-        }
-
-        if (Input.GetMouseButtonDown(1) && isAnObjectSelected == true)
-        {
-            Destroy(currentlySelectedObject);
-            isAnObjectSelected = false;
-            selectedObjectInArray = 0;
-        }
-*/
-        /*if (Input.GetAxis("Mouse ScrollWheel") > 0 && isAnObjectSelected == true)
-        {
-            selectedObjectInArray++;
-
-            if (selectedObjectInArray > selectableObjects.Length - 1)
-            {
-                selectedObjectInArray = 0;
-            }
-
-            Destroy(currentlySelectedObject);
-            currentlySelectedObject = (GameObject)Instantiate(selectableObjects[selectedObjectInArray], spawnPos, Quaternion.identity);
-        }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && isAnObjectSelected == true)
-        {
-            selectedObjectInArray--;
-
-            if (selectedObjectInArray < 0)
-            {
-                selectedObjectInArray = selectableObjects.Length - 1;
-            }
-
-            Destroy(currentlySelectedObject);
-            currentlySelectedObject = (GameObject)Instantiate(selectableObjects[selectedObjectInArray], spawnPos, Quaternion.identity);
-        }*/
     }
 
     public void placeSpawn() {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 spawnPos = new Vector2(Mathf.Round(mousePos.x), Mathf.Round(mousePos.y));
-            currentlySelectedObject = (GameObject)Instantiate(selectableObjects[selectedObjectInArray], spawnPos, Quaternion.identity);
+           //currentlySelectedObject = (GameObject)Instantiate(selectableObjects[selectedObjectInArray], spawnPos, Quaternion.identity);
             isAnObjectSelected = true;
+            buildingControls.setOffense(true);
+            buildingControls.setUnitPrefab(unitPrefab);
+            buildingControls.setFaction(humanPlayer.showFaction());
+            buildingControls.setSpawnLocation((int)spawnPos.y, (int)spawnPos.x);
+            GameObject build = buildingControls.buildSpawnerPrefab();
 
         if (Input.GetMouseButtonDown(1) && isAnObjectSelected == true)
         {

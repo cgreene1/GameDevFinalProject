@@ -63,4 +63,8 @@ public class Manager : MonoBehaviour
         }
         else return playerlist[1].GetComponent<Player_controls>();
     }
+
+    public Player_controls showHuman() {
+        return playerlist[0].GetComponent<Player_controls>();
+    }
 }

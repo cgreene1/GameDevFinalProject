@@ -35,12 +35,14 @@ public class Building_Controls : MonoBehaviour
     //creates a spawner prefab and adds it to the map, returns null if cannot be placed
     //should be called AFTER setting things with buttons
     public GameObject buildSpawnerPrefab(){
-        Renderer r = spawnerPrefab.GetComponent<Renderer>();
-        (int sizex, int sizey) = map.tileScale(r);
-        if(map.canPlace(row, col, sizex, sizey)){
+        if (map.canPlace(row, col, 2, 2))
+        {
+            GameObject newSpawner = map.addBuilding(spawnerPrefab, row, col);      
+            Debug.Log("building controls: " + faction.showName());
+            spawnScript = newSpawner.GetComponent<Spawner>();
             spawnScript.setVals(isOffense, unitPrefab, faction, player);
             player.gainSpawner(spawnScript);
-            return map.addBuilding(spawnerPrefab, row, col);
+            return newSpawner;
         }
         return null;
     }
@@ -54,6 +56,7 @@ public class Building_Controls : MonoBehaviour
         if(map.canPlace(row, col, sizex, sizey)){
             Mine mineScript = minePrefab.GetComponent<Mine>();
             mineScript.setFaction(faction);
+            Debug.Log("BuildingControls player:" + player);
             mineScript.setPlayer(player);
           //  mineScript.setRare(isRare);
             player.gainMine(mineScript);

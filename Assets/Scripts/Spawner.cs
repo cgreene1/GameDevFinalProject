@@ -17,7 +17,9 @@ public class Spawner : MonoBehaviour
     private Player_controls player;
     Renderer render;
     Map map;
-    
+    private bool active;
+    [SerializeField] GameObject defaultUnit;
+
     int population;
 
     // Start is called before the first frame update
@@ -31,21 +33,32 @@ public class Spawner : MonoBehaviour
         trans = gameObject.GetComponent<Transform>();
         population = 0;
         cost = (10, 10);
-        InvokeRepeating("spawn", spawnDelay, spawnDelay);
+        active = false;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (this.tag == "Enemy" && !active)
+        {
+            active = true;
+            InvokeRepeating("spawn", spawnDelay, spawnDelay);
+            unitPrefab = defaultUnit;
+            isOffense = true;
 
+        }
     }
 
     public void setVals(bool off, GameObject pre, Faction fact, Player_controls owner){
+        
         unitPrefab = pre;
         isOffense = off;
         faction = fact;
+        this.tag = faction.showName();
         player = owner;
+        Debug.Log(player);
         cost = (10, 10);
+        InvokeRepeating("spawn", spawnDelay, spawnDelay);
     }
 
     public (int row, int col) getLocation(){
@@ -59,17 +72,24 @@ public class Spawner : MonoBehaviour
     // need to check if the player is bankrupt
     void spawn(){
         Debug.Log("Spawning a new unit");
+        Debug.Log(faction);
         GameObject newUnit = Instantiate(unitPrefab, new Vector3(trans.position.x, trans.position.y+1, 0), Quaternion.identity);
-        newUnit.tag = faction.showName();
-        if (isOffense)
+        newUnit.tag = this.tag;
+        newUnit.GetComponent<Unit>().getPlayer(player);
+        Debug.Log(player);
+        if (this.tag != "Enemy")
         {
-            player.gainAttacker(newUnit.GetComponent<Unit>());
+            if (isOffense)
+            {
+                player.gainAttacker(newUnit.GetComponent<Unit>());
+            }
+            else if (!isOffense)
+            {
+                player.gainDefender(newUnit.GetComponent<Unit>());
+            }
+            else { Debug.Log("What am I a pacifist?"); }
+            Debug.Log(newUnit.tag);
         }
-        else
-        {
-            player.gainDefender(newUnit.GetComponent<Unit>());
-        }
-        Debug.Log(newUnit.tag);
     }
 
     public (int, int) showCost()
@@ -81,5 +101,6 @@ public class Spawner : MonoBehaviour
     {
         return unitPrefab;
     }
+
 
 }

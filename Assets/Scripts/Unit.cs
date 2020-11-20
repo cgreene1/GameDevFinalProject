@@ -28,7 +28,7 @@ public class Unit : MonoBehaviour
     {
         health = 100f;
         target = null;
-        charging = false;
+        charging = true;
         speed = 2f;
         range = 1f;
         damage = 5f;
@@ -128,22 +128,23 @@ public class Unit : MonoBehaviour
         }
     }
     // you hit someone else
-    public void hit(GameObject target){
+    public void hit(GameObject target)
+    {
+     
         enemyScript.getHit(this);
     }
 
-    private void findClosest(string str){
+    private void findClosest(string str) {
 
         List<Unit> enemyScripts = new List<Unit>();
-        enemyScripts.AddRange(GameObject.FindObjectsOfType<Unit>().Where(u => u.getFaction() != faction)); //change for AI
+        enemyScripts.AddRange(GameObject.FindObjectsOfType<Unit>().Where(u => u.CompareTag(str))); //change for AI
         List<GameObject> enemies = new List<GameObject>();
 
-        /*
         foreach(Unit enemy in enemyScripts){
             enemies.Add(enemy.gameObject);
         }
-        */
-        enemies.AddRange(GameObject.FindGameObjectsWithTag(str)); //change for AI
+       
+        //enemies.AddRange(GameObject.FindGameObjectsWithTag(str)); //change for AI
         //takes in all enemies on the field and calculates distance
         if(enemies.Count > 0){
             GameObject closestEnemy = null;
@@ -166,8 +167,11 @@ public class Unit : MonoBehaviour
 
     public void dies(){
         Unit me = this;
-        player.LoseUnit(this);
-        Destroy(gameObject);
+        if (player != null)
+        {
+            player.LoseUnit(this);
+        }
+        Destroy(this.gameObject);
     }
 
     public void charge(LinkedList<(int, int)> targets)
@@ -232,5 +236,9 @@ public class Unit : MonoBehaviour
         return faction;
     }
 
+    public void getPlayer(Player_controls owner)
+    {
+        player = owner;
+    }
 
 }

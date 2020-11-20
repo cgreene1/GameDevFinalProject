@@ -9,11 +9,11 @@ public class Building_Controls : MonoBehaviour
     bool isRare;
     GameObject unitPrefab;
     [SerializeField] GameObject spawnerPrefab;
-    GameObject minePrefab;
+    [SerializeField] GameObject minePrefab;
     Faction faction;
-
+    Spawner spawnScript;
     int row, col;
-
+    Player_controls player;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +21,9 @@ public class Building_Controls : MonoBehaviour
         isOffense = true;
         row = 0;
         col = 0;
+
+        spawnScript = spawnerPrefab.GetComponent("Spawner") as Spawner;
+
     }
 
     // Update is called once per frame
@@ -35,10 +38,8 @@ public class Building_Controls : MonoBehaviour
         Renderer r = spawnerPrefab.GetComponent<Renderer>();
         (int sizex, int sizey) = map.tileScale(r);
         if(map.canPlace(row, col, sizex, sizey)){
-            Debug.Log("spanwning spawner");
-            Spawner spawnScript = spawnerPrefab.GetComponent<Spawner>();
-            Debug.Log(spawnScript);
-            spawnScript.setVals(isOffense, unitPrefab, faction);
+            spawnScript.setVals(isOffense, unitPrefab, faction, player);
+            player.gainSpawner(spawnScript);
             return map.addBuilding(spawnerPrefab, row, col);
         }
         return null;
@@ -52,14 +53,17 @@ public class Building_Controls : MonoBehaviour
         (int sizex, int sizey) = map.tileScale(r);
         if(map.canPlace(row, col, sizex, sizey)){
             Mine mineScript = minePrefab.GetComponent<Mine>();
-            mineScript.setRare(isRare);
+            mineScript.setFaction(faction);
+            mineScript.setPlayer(player);
+          //  mineScript.setRare(isRare);
+            player.gainMine(mineScript);
             return map.addBuilding(minePrefab, row, col);
         }
         return null;
     }
 
     public void setUnitPrefab(GameObject prefab){
-        spawnerPrefab = prefab;
+        unitPrefab = prefab;
     }
 
     public void setSpawnLocation(int r, int c){
@@ -75,7 +79,6 @@ public class Building_Controls : MonoBehaviour
     }
 
     public void setFaction(Faction fact){
-        Debug.Log("FAction");
         faction = fact;
     }
 
@@ -83,4 +86,10 @@ public class Building_Controls : MonoBehaviour
     {
         return spawnerPrefab;
     }
+
+    public void setPlayer(Player_controls owner)
+    {
+        player = owner;
+    }
+
 }

@@ -14,10 +14,10 @@ public class Spawner : MonoBehaviour
     public GameObject unitPrefab;
     Transform trans;
     Faction faction;
-    // Player player;
+    private Player_controls player;
     Renderer render;
     Map map;
-
+    
     int population;
 
     // Start is called before the first frame update
@@ -30,23 +30,22 @@ public class Spawner : MonoBehaviour
         render = gameObject.GetComponent<Renderer>();
         trans = gameObject.GetComponent<Transform>();
         population = 0;
-        cost = (1, 1);
+        cost = (10, 10);
+        InvokeRepeating("spawn", spawnDelay, spawnDelay);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        timer++;
-        if(timer > spawnDelay){
-            spawn();
-            timer = 0;
-        }
+
     }
 
-    public void setVals(bool off, GameObject pre, Faction fact){
+    public void setVals(bool off, GameObject pre, Faction fact, Player_controls owner){
         unitPrefab = pre;
         isOffense = off;
         faction = fact;
+        player = owner;
+        cost = (10, 10);
     }
 
     public (int row, int col) getLocation(){
@@ -57,10 +56,19 @@ public class Spawner : MonoBehaviour
         return map.tileScale(render);
     }
 
-
+    // need to check if the player is bankrupt
     void spawn(){
+        Debug.Log("Spawning a new unit");
         GameObject newUnit = Instantiate(unitPrefab, new Vector3(trans.position.x, trans.position.y+1, 0), Quaternion.identity);
         newUnit.tag = faction.showName();
+        if (isOffense)
+        {
+            player.gainAttacker(newUnit.GetComponent<Unit>());
+        }
+        else
+        {
+            player.gainDefender(newUnit.GetComponent<Unit>());
+        }
         Debug.Log(newUnit.tag);
     }
 
@@ -73,4 +81,5 @@ public class Spawner : MonoBehaviour
     {
         return unitPrefab;
     }
+
 }

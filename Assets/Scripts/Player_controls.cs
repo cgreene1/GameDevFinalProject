@@ -46,26 +46,30 @@ public class Player_controls : MonoBehaviour
         spawnerList = new LinkedList<Spawner>();
         mineList = new LinkedList<Mine>();
         behaving = false;
+        InvokeRepeating("finances", 05f, 05f);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        finances();
         // AI behaviour
+        /*
         if (!human && !behaving)
         {
             behaving = true;
             InvokeRepeating("AIBehaviour", 2f, 5f);
         }
+        */
     }
 
     private void AIBehaviour()
     {
+        Debug.Log("AI Online");
         // check to see if AI can place a building
         Spawner test = spawner1.GetComponent<Spawner>();
         if (canAfford(test.showCost()))
         {
+            Debug.Log("I can afford the spawner");
             // check to see if income is postive
             if (posCommonIn && posRareIn)
             {
@@ -268,40 +272,45 @@ public class Player_controls : MonoBehaviour
     // when a spawner is created add it to the list
     public void gainSpawner(Spawner building)
     {
+        Debug.Log("spawner was added new resource count");
         (int, int) cost = building.showCost();
         if (Math.Abs(cost.Item1) > 0)
         {
-            this.stockpile[0] += (cost.Item1);
+            this.stockpile[0] -= (cost.Item1);
+            Debug.Log(stockpile[0]);
     
-        }
-        else if (Math.Abs(cost.Item2) > 0)
+        } else Debug.Log("spawner has 0 common cost");
+
+        if (Math.Abs(cost.Item2) > 0)
         {
-            this.stockpile[1] += (cost.Item2);
+            this.stockpile[1] -= (cost.Item2);
+            Debug.Log(stockpile[1]);
          
-        }
-        else Debug.Log("spawner has 0 cost");
+        } else Debug.Log("spawner has 0 Rare cost");
             spawnerList.AddFirst(building);
     }
 
     // when a mine is added, add it to the list
     public void gainMine(Mine building)
     {
+        Debug.Log("Mine was added new resource count");
         (int, int) cost = building.showCost();
         if (Math.Abs(cost.Item1) > 0)
         {
-            this.stockpile[0] += (cost.Item1);
+            this.stockpile[0] -= (cost.Item1);
+            Debug.Log(stockpile[0]);
 
         }
-        else if (Math.Abs(cost.Item2) > 0)
+        else Debug.Log("spawner has 0 common cost");
+
+        if (Math.Abs(cost.Item2) > 0)
         {
-            this.stockpile[1] += (cost.Item2);
+            this.stockpile[1] -= (cost.Item2);
+            Debug.Log(stockpile[1]);
 
         }
-        else Debug.Log("mine has 0 cost");
-
-        (int, int) ni = building.showIncome();
-        int check = changeResourcesIncome(ni);
-        if(check == 0 ) Debug.Log("Mine gained with no income!");
+        else Debug.Log("spawner has 0 Rare cost");
+        changeResourcesIncome(building.showIncome());
         mineList.AddFirst(building);
     }
 
@@ -407,7 +416,7 @@ public class Player_controls : MonoBehaviour
         GUI.Label(new Rect(10,10,10000,20), "Common Income: " + (showCommonIncome()).ToString());
         GUI.Label(new Rect(10,-1,10000,20), "Rare Income: " + (showRareIncome()).ToString());
         GUI.Label(new Rect(10,20,10000,20), "Upkeep: " + upkeep[0].ToString());
-        GUI.Label(new Rect(10,30,10000,20), "StockPile: " + stockpile[0].ToString());
+        GUI.Label(new Rect(10,30,10000,20), "StockPile Common,Rare: " + stockpile[0].ToString() + " , " + stockpile[1].ToString());
     }
 }
 

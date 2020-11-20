@@ -17,7 +17,7 @@ public class Map : MonoBehaviour
     {
         map  = GetComponent<Tilemap>();
         buildings = new GameObject[map.size.y,map.size.x];
-
+        tileSize = 16;
     }
 
     // Update is called once per frame
@@ -79,7 +79,7 @@ public class Map : MonoBehaviour
                     buildings[i,j] = prefab;
                 }
             }
-            GameObject newObj = Instantiate(prefab, new Vector3(col*tileSize, row*tileSize, 0) + Vector3.down, Quaternion.identity);
+            GameObject newObj = Instantiate(prefab, new Vector3(col, row, 0) + Vector3.down, Quaternion.identity);
             return newObj;
         }
         return null;

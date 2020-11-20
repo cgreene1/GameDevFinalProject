@@ -268,7 +268,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 108127195}
         m_TargetAssemblyTypeName: PlaceBuilding, Assembly-CSharp
-        m_MethodName: placeSpawn
+        m_MethodName: wantSpawner
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3606,6 +3606,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnerPrefab: {fileID: 2814099638905183255, guid: 7323c6a3f25cc724098787246d92987c,
     type: 3}
+  minePrefab: {fileID: 8832433574983286152, guid: 31aa6537014ae27429381c34c6d2956d,
+    type: 3}
 --- !u!4 &857554695
 Transform:
   m_ObjectHideFlags: 0
@@ -4055,7 +4057,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1228582207}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 108127195}
+        m_TargetAssemblyTypeName: PlaceBuilding, Assembly-CSharp
+        m_MethodName: wantMine
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1228582207
 MonoBehaviour:
   m_ObjectHideFlags: 0

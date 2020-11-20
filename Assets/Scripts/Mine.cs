@@ -8,7 +8,7 @@ public class Mine : MonoBehaviour
     Faction faction;
     Renderer render;
     Map map;
-
+    Player_controls player;
     bool isRare;
     (int, int) income;
     (int, int) cost;
@@ -20,8 +20,8 @@ public class Mine : MonoBehaviour
         trans = gameObject.GetComponent<Transform>();
         isRare = false;
         // set income
-        income = (1, 1);
-        cost = (1, 1);
+        income = (10, 10);
+        cost = (10, 10);
     }
 
     // Update is called once per frame
@@ -48,5 +48,13 @@ public class Mine : MonoBehaviour
     public (int,int) showCost()
     {
         return cost;
+    }
+    public void setFaction(Faction fact)
+    {
+        faction = fact;
+    }
+    public void setPlayer(Player_controls owner)
+    {
+        player = owner;
     }
 }

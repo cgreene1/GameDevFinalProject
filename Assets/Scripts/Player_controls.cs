@@ -53,13 +53,13 @@ public class Player_controls : MonoBehaviour
     void FixedUpdate()
     {
         // AI behaviour
-        /*
+        
         if (!human && !behaving)
         {
             behaving = true;
             InvokeRepeating("AIBehaviour", 2f, 5f);
         }
-        */
+        
     }
 
     private void AIBehaviour()
@@ -95,9 +95,10 @@ public class Player_controls : MonoBehaviour
                     buildingControls.setUnitPrefab(randPrefab);
                     buildingControls.setFaction(faction);
                     buildingControls.setSpawnLocation(randRow, randCol);
-                    build = buildingControls.buildSpawnerPrefab();
+                    build = buildingControls.buildSpawnerPrefab(this);
                 }while(build is null);
                 gainSpawner(build.GetComponent<Spawner>());
+                Debug.Log("AI has built a spawner");
             }
             else
             {
@@ -144,9 +145,6 @@ public class Player_controls : MonoBehaviour
         upkeep[1] = 0;
         // set bankrupt status
         bankrupt = false;
-        for(int i = 0; i <= 1; i++) {
-            Debug.Log(stockpile[0] + " " + income[0] + " " + upkeep[0]);
-        }
     }
 
     //Handle income and upkeep for the player will declare bankrupt if less than 0 of a single resource

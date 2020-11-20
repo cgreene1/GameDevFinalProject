@@ -56,7 +56,6 @@ public class Spawner : MonoBehaviour
         faction = fact;
         this.tag = faction.showName();
         player = owner;
-        Debug.Log(player);
         cost = (10, 10);
         InvokeRepeating("spawn", spawnDelay, spawnDelay);
     }
@@ -71,12 +70,9 @@ public class Spawner : MonoBehaviour
 
     // need to check if the player is bankrupt
     void spawn(){
-        Debug.Log("Spawning a new unit");
-        Debug.Log(faction);
         GameObject newUnit = Instantiate(unitPrefab, new Vector3(trans.position.x, trans.position.y+1, 0), Quaternion.identity);
         newUnit.tag = this.tag;
         newUnit.GetComponent<Unit>().getPlayer(player);
-        Debug.Log(player);
         if (this.tag != "Enemy")
         {
             if (isOffense)

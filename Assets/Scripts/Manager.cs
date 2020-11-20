@@ -48,7 +48,6 @@ public class Manager : MonoBehaviour
        for(int i = 0; i <= size; i++)
         {
             GameObject np = Instantiate(prefab);
-            Debug.Log(i);
             playerlist.Add(np);
             if(i == 0)
             {

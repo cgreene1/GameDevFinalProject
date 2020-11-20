@@ -98,3 +98,5 @@ MonoBehaviour:
   spawnDelay: 5
   unitPrefab: {fileID: 1417797311191159410, guid: 0a0f13f2192b7044795262845869cab6,
     type: 3}
+  defaultUnit: {fileID: 1417797311191159410, guid: 0a0f13f2192b7044795262845869cab6,
+    type: 3}

@@ -49,25 +49,23 @@ public class PlaceBuilding : MonoBehaviour
 
     public void placeSpawn()
     {
-        Debug.Log("spawner button heard");
         Vector2 spawnPos = new Vector2(Mathf.Round(mousePos.x), Mathf.Round(mousePos.y));
         buildingControls.setOffense(true);
         buildingControls.setUnitPrefab(unitPrefab);
         buildingControls.setFaction(humanPlayer.showFaction());
         buildingControls.setSpawnLocation((int)spawnPos.y, (int)spawnPos.x);
-        Debug.Log("(" + spawnPos.x + " , " + spawnPos.y + ")");
+        
         Debug.Log("(" + (int)spawnPos.x + " , " + (int)spawnPos.y + ")");
-        GameObject build = buildingControls.buildSpawnerPrefab();
+        GameObject build = buildingControls.buildSpawnerPrefab(humanPlayer);
 
     }
     public void placeMine()
     {
-        Debug.Log("spawner button heard");
+        Debug.Log("Miner button heard");
         Vector2 spawnPos = new Vector2(Mathf.Round(mousePos.x), Mathf.Round(mousePos.y));
         buildingControls.setFaction(humanPlayer.showFaction());
         buildingControls.setPlayer(humanPlayer);
         buildingControls.setSpawnLocation((int)spawnPos.y, (int)spawnPos.x);
-        Debug.Log("(" + spawnPos.x + " , " + spawnPos.y + ")");
         Debug.Log("(" + (int)spawnPos.x + " , " + (int)spawnPos.y + ")");
         GameObject build = buildingControls.buildMinePrefab();
 

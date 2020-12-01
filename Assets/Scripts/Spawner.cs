@@ -43,7 +43,7 @@ public class Spawner : MonoBehaviour
         {
             active = true;
             InvokeRepeating("spawn", spawnDelay, spawnDelay);
-            unitPrefab = defaultUnit;
+            // unitPrefab = defaultUnit;
             isOffense = true;
 
         }
@@ -51,7 +51,8 @@ public class Spawner : MonoBehaviour
 
     public void setVals(bool off, GameObject pre, Faction fact, Player_controls owner){
         
-        unitPrefab = pre;
+        // if(this.tag != "Enemy") unitPrefab = pre;
+        // else Debug.Log("enemy spawner");
         isOffense = off;
         faction = fact;
         this.tag = faction.showName();

@@ -10,6 +10,9 @@ public class Building_Controls : MonoBehaviour
     GameObject unitPrefab;
     [SerializeField] GameObject spawnerPrefab;
     [SerializeField] GameObject minePrefab;
+    [SerializeField] GameObject enemySpawnerPrefab;
+    [SerializeField] GameObject enemyMinePrefab;
+    [SerializeField] GameObject enemyUnitPrefab;
     Faction faction;
     Spawner spawnScript;
     int row, col;
@@ -35,33 +38,38 @@ public class Building_Controls : MonoBehaviour
     //creates a spawner prefab and adds it to the map, returns null if cannot be placed
     //should be called AFTER setting things with buttons
     public GameObject buildSpawnerPrefab(Player_controls builder){
-        if (map.canPlace(row, col, 2, 2))
-        {
-            GameObject newSpawner = map.addBuilding(spawnerPrefab, row, col);      
+            GameObject newSpawner;
+            if(faction.showName() == "Enemy"){
+                newSpawner = map.addBuilding(enemySpawnerPrefab, row, col);
+                newSpawner.GetComponent<Spawner>().unitPrefab = enemyUnitPrefab;
+            }
+            else{
+                newSpawner = map.addBuilding(spawnerPrefab, row, col);  
+            }
             Debug.Log("building controls: " + faction.showName());
             spawnScript = newSpawner.GetComponent<Spawner>();
             spawnScript.setVals(isOffense, unitPrefab, faction, builder);
             builder.gainSpawner(spawnScript);
             return newSpawner;
-        }
-        return null;
     }
 
 
     //creates a mine prefab and adds it to the map, returns null if cannot be placed
     //should be called AFTER setting things with buttons
     public GameObject buildMinePrefab(){
-        GameObject newMine = map.addBuilding(minePrefab, row, col);
-        if (map.canPlace(row, col, 2, 2)){
-            Mine mineScript = newMine.GetComponent<Mine>();
-            mineScript.setFaction(faction);
-            Debug.Log("BuildingControls player:" + player);
-            mineScript.setPlayer(player);
-          //  mineScript.setRare(isRare);
-            player.gainMine(mineScript);
-            return map.addBuilding(minePrefab, row, col);
+        GameObject newMine;
+        if(faction.showName() == "Enemy"){
+            newMine = map.addBuilding(enemyMinePrefab, row, col);
         }
-        return null;
+        else{
+            newMine = map.addBuilding(minePrefab, row, col);
+        }
+        Mine mineScript = newMine.GetComponent<Mine>();
+        mineScript.setFaction(faction);
+        Debug.Log("BuildingControls player:" + player);
+        mineScript.setPlayer(player);
+        player.gainMine(mineScript);
+        return map.addBuilding(minePrefab, row, col);
     }
 
     public void setUnitPrefab(GameObject prefab){

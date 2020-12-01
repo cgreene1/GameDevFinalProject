@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 //using UnityEditor.U2D.Common;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Player_controls : MonoBehaviour
 {
@@ -65,6 +66,7 @@ public class Player_controls : MonoBehaviour
     private void AIBehaviour()
     {
         Debug.Log("AI Online");
+        Tilemap tilemap = map.GetComponent<Tilemap>();
         // check to see if AI can place a building
         Spawner test = spawner1.GetComponent<Spawner>();
         if (canAfford(test.showCost()))
@@ -86,8 +88,8 @@ public class Player_controls : MonoBehaviour
                 GameObject build;
                 GameObject[] unitPrefabs = faction.getUnitPrefabs();
                 do{
-                    randCol = random.Next(0, col);
-                    randRow = random.Next(0,row);
+                    randCol = random.Next(tilemap.cellBounds.min.x + 1, tilemap.cellBounds.max.x -1);
+                    randRow = random.Next(tilemap.cellBounds.min.y + 1, tilemap.cellBounds.max.y - 1);
                     offense = random.Next(0,2);
                     // randPrefab = unitPrefabs[random.Next(0,unitPrefabs.Length)];
                     randPrefab = GameObject.Find("BuildingControls").GetComponent<Building_Controls>().getSpawner().GetComponent<Spawner>().showUnitPrefab();
@@ -102,7 +104,27 @@ public class Player_controls : MonoBehaviour
             }
             else
             {
-                // build a mine (since you have a negative income you need more income) TODO
+                bool flag = true;
+                System.Random random = new System.Random();
+                (int col, int row) = map.getSize();
+                int randCol;
+                int randRow;
+                int offense;
+                GameObject randPrefab;
+                GameObject build;
+                GameObject[] unitPrefabs = faction.getUnitPrefabs();
+
+                do{
+                    randCol = random.Next(tilemap.cellBounds.min.x+1, tilemap.cellBounds.max.x-1);
+                    randRow = random.Next(tilemap.cellBounds.min.y+1, tilemap.cellBounds.max.y-1);
+                    offense = random.Next(0,2);
+                    // randPrefab = unitPrefabs[random.Next(0,unitPrefabs.Length)];
+                    buildingControls.setFaction(faction);
+                    buildingControls.setSpawnLocation(randRow, randCol);
+                    build = buildingControls.buildMinePrefab();
+                }while(build is null);
+                gainSpawner(build.GetComponent<Spawner>());
+                Debug.Log("AI has built a spawner");
             }
         }
         // check to see if we need to attack (for income reasons that is you have a negative income and are bankrupt)
@@ -275,14 +297,14 @@ public class Player_controls : MonoBehaviour
         if (Math.Abs(cost.Item1) > 0)
         {
             this.stockpile[0] -= (cost.Item1);
-            Debug.Log(stockpile[0]);
+            // Debug.Log(stockpile[0]);
     
         } else Debug.Log("spawner has 0 common cost");
 
         if (Math.Abs(cost.Item2) > 0)
         {
             this.stockpile[1] -= (cost.Item2);
-            Debug.Log(stockpile[1]);
+            // Debug.Log(stockpile[1]);
          
         } else Debug.Log("spawner has 0 Rare cost");
             spawnerList.AddFirst(building);
@@ -296,7 +318,7 @@ public class Player_controls : MonoBehaviour
         if (Math.Abs(cost.Item1) > 0)
         {
             this.stockpile[0] -= (cost.Item1);
-            Debug.Log(stockpile[0]);
+            // Debug.Log(stockpile[0]);
 
         }
         else Debug.Log("spawner has 0 common cost");
@@ -304,7 +326,7 @@ public class Player_controls : MonoBehaviour
         if (Math.Abs(cost.Item2) > 0)
         {
             this.stockpile[1] -= (cost.Item2);
-            Debug.Log(stockpile[1]);
+            // Debug.Log(stockpile[1]);
 
         }
         else Debug.Log("spawner has 0 Rare cost");

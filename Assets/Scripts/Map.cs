@@ -41,15 +41,12 @@ public class Map : MonoBehaviour
         Vector3 pos = new Vector3((float)col, (float)row, 0f);
         foreach (GameObject build in buildings){
             Renderer rend = build.GetComponent<Renderer>();
-            Debug.Log(rend.bounds + " vs " + pos);
-            
             if(rend.bounds.Contains(pos)){
                 return false;
             }
 
         }
         Vector3Int intPos = new Vector3Int(col, row, 0);
-        Debug.Log("int position: " + intPos);
         return map.cellBounds.Contains(intPos);
         // return true;
     }

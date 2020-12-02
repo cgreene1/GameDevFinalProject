@@ -37,10 +37,6 @@ public class Mine : MonoBehaviour
     public (int x, int y) getSize(){
         return map.tileScale(render);
     }
-
-    public void setRare(bool rare){
-        isRare = rare;
-    }
     public (int,int) showIncome()
     {
         return income;

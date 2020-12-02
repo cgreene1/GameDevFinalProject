@@ -41,7 +41,6 @@ public class Building_Controls : MonoBehaviour
             GameObject newSpawner;
             if(faction.showName() == "Enemy"){
                 newSpawner = map.addBuilding(enemySpawnerPrefab, row, col);
-                newSpawner.GetComponent<Spawner>().unitPrefab = enemyUnitPrefab;
             }
             else{
                 newSpawner = map.addBuilding(spawnerPrefab, row, col);  
@@ -56,7 +55,8 @@ public class Building_Controls : MonoBehaviour
 
     //creates a mine prefab and adds it to the map, returns null if cannot be placed
     //should be called AFTER setting things with buttons
-    public GameObject buildMinePrefab(){
+    public GameObject buildMinePrefab(Player_controls builder){
+
         GameObject newMine;
         if(faction.showName() == "Enemy"){
             newMine = map.addBuilding(enemyMinePrefab, row, col);
@@ -65,11 +65,10 @@ public class Building_Controls : MonoBehaviour
             newMine = map.addBuilding(minePrefab, row, col);
         }
         Mine mineScript = newMine.GetComponent<Mine>();
-        mineScript.setFaction(faction);
-        Debug.Log("BuildingControls player:" + player);
-        mineScript.setPlayer(player);
-        player.gainMine(mineScript);
-        return map.addBuilding(minePrefab, row, col);
+        mineScript.setFaction(builder.showFaction());
+        mineScript.setPlayer(builder);
+        builder.gainMine(mineScript);
+        return newMine;
     }
 
     public void setUnitPrefab(GameObject prefab){
@@ -97,6 +96,10 @@ public class Building_Controls : MonoBehaviour
         return spawnerPrefab;
     }
 
+    public GameObject getMine()
+    {
+        return enemyMinePrefab;
+    }
     public void setPlayer(Player_controls owner)
     {
         player = owner;

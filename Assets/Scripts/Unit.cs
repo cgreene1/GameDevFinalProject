@@ -22,6 +22,7 @@ public class Unit : MonoBehaviour
     private bool charging;
     private Map map;
     private Renderer render;
+    private int unitType;
 
     // Start is called before the first frame update
     void Awake()
@@ -38,7 +39,7 @@ public class Unit : MonoBehaviour
         target = null;
         map = GameObject.Find("Map").GetComponent<Map>();
         render = gameObject.GetComponent<Renderer>();
-        
+        unitType = 1;
         upkeep = (1, 1);
 
         camp = new Vector2(Random.Range(-3f, -5f), Random.Range(-1f, 1f));
@@ -240,5 +241,8 @@ public class Unit : MonoBehaviour
     {
         player = owner;
     }
-
+    public int showType()
+    {
+        return unitType;
+    }
 }

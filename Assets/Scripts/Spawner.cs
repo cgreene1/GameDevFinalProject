@@ -34,6 +34,7 @@ public class Spawner : MonoBehaviour
         population = 0;
         cost = (10, 10);
         active = false;
+        Debug.Log(player.checkHuman());
     }
 
     // Update is called once per frame
@@ -74,8 +75,6 @@ public class Spawner : MonoBehaviour
         GameObject newUnit = Instantiate(unitPrefab, new Vector3(trans.position.x, trans.position.y+1, 0), Quaternion.identity);
         newUnit.tag = this.tag;
         newUnit.GetComponent<Unit>().getPlayer(player);
-        if (this.tag != "Enemy")
-        {
             if (isOffense)
             {
                 player.gainAttacker(newUnit.GetComponent<Unit>());
@@ -85,8 +84,7 @@ public class Spawner : MonoBehaviour
                 player.gainDefender(newUnit.GetComponent<Unit>());
             }
             else { Debug.Log("What am I a pacifist?"); }
-            Debug.Log(newUnit.tag);
-        }
+
     }
 
     public (int, int) showCost()
@@ -98,6 +96,4 @@ public class Spawner : MonoBehaviour
     {
         return unitPrefab;
     }
-
-
 }

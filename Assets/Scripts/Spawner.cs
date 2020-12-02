@@ -43,7 +43,6 @@ public class Spawner : MonoBehaviour
     public void setVals(bool off, GameObject pre, Faction fact, Player_controls owner){
         
         // if(this.tag != "Enemy") unitPrefab = pre;
-        Debug.Log("enemy spawner");
         isOffense = off;
         faction = fact;
         this.tag = faction.showName();

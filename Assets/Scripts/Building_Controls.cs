@@ -104,4 +104,32 @@ public class Building_Controls : MonoBehaviour
         player = owner;
     }
 
-}
+
+    public GameObject getPlayerSpawner()
+    {
+        return spawnerPrefab;
+    }
+    public GameObject getPlayerMine()
+    {
+        return minePrefab;
+    }
+    public GameObject getPlayerUnit1()
+    {
+        return spawnerPrefab;
+    }
+    public GameObject getEnemySpawner()
+    {
+        return enemySpawnerPrefab;
+    }
+    public GameObject getEnemyMine()
+    {
+        return enemyMinePrefab;
+    }
+    public GameObject getEnemyUnit1()
+    {
+        return enemyUnitPrefab;
+    }
+
+
+
+    }

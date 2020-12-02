@@ -9,16 +9,15 @@ public class Faction
 
     private string whichFaction;
     private GameObject[] unitPrefabs;
-    private List<GameObject> spawnerPrefabs;
-    private LinkedList<GameObject> minePrefabs;
+    private GameObject spawnerPrefab;
+    private GameObject minePrefab;
 
     // call at start to create proper faction for player
     public Faction SetFaction(bool player)
     {
         // set faction here, eiter a button push for player or random for the AI
         unitPrefabs = null;
-        spawnerPrefabs = new List<GameObject>();
-        spawnerPrefabs.Add(GameObject.Find("BuildingControls").GetComponent<Building_Controls>().getSpawner());
+        spawnerPrefab = null;
         if (player)
         {
             // ask player to choose which faction they what to play as
@@ -36,41 +35,23 @@ public class Faction
 
     public void PopulateFaction()
     {
-        if (this.whichFaction == "SCIFI")
+        if (this.whichFaction == "Player")
         {
-            SetSCIFI();
-        }else if(this.whichFaction == "Fantasy")
+            spawnerPrefab = (GameObject.Find("BuildingControls").GetComponent<Building_Controls>().getPlayerSpawner());
+            minePrefab = GameObject.Find("BuildingControls").GetComponent<Building_Controls>().getPlayerMine();
+
+        } else if (this.whichFaction == "Enemy")
         {
-            SetFantasy();
-        }else if(this.whichFaction == "Undead")
-        {
-            SetUndead();
-        }
-        else
-        {
-            Debug.Log("Error in Faction naming");
+            spawnerPrefab = (GameObject.Find("BuildingControls").GetComponent<Building_Controls>().getEnemySpawner());
+            minePrefab = GameObject.Find("BuildingControls").GetComponent<Building_Controls>().getEnemyMine();
+
         }
     }
 
-
-    void SetSCIFI()
-    {
-        
-    }
-
-    void SetFantasy()
-    {
-
-    }
-
-    void SetUndead()
-    {
-
-    }
 
 
     public GameObject getSpawnPrefab(){
-        return spawnerPrefabs[0];
+        return spawnerPrefab;
     }
 
     public GameObject[] getUnitPrefabs(){

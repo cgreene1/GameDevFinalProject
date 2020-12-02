@@ -69,6 +69,10 @@ public class Player_controls : MonoBehaviour
         Tilemap tilemap = map.GetComponent<Tilemap>();
         // check to see if AI can place a building
         Spawner test = spawner1.GetComponent<Spawner>();
+        // show me the state of the AI
+        Debug.Log("AI economy " + stockpile[0] + "," + stockpile[1]);
+        Debug.Log("AI income " + income[0] + "," + income[1]);
+        Debug.Log("AI upkeep " + upkeep[0] + "," + upkeep[1]);
         if (canAfford(test.showCost()))
         {
             Debug.Log("I can afford the spawner");
@@ -110,21 +114,18 @@ public class Player_controls : MonoBehaviour
                 int randCol;
                 int randRow;
                 int offense;
-                GameObject randPrefab;
                 GameObject build;
-                GameObject[] unitPrefabs = faction.getUnitPrefabs();
-
                 do{
                     randCol = random.Next(tilemap.cellBounds.min.x+1, tilemap.cellBounds.max.x-1);
                     randRow = random.Next(tilemap.cellBounds.min.y+1, tilemap.cellBounds.max.y-1);
                     offense = random.Next(0,2);
-                    // randPrefab = unitPrefabs[random.Next(0,unitPrefabs.Length)];
+                    //randPrefab = GameObject.Find("BuildingControls").GetComponent<Building_Controls>().getMine().GetComponent<Mine>();
                     buildingControls.setFaction(faction);
                     buildingControls.setSpawnLocation(randRow, randCol);
-                    build = buildingControls.buildMinePrefab();
+                    build = buildingControls.buildMinePrefab(this);
                 }while(build is null);
-                gainSpawner(build.GetComponent<Spawner>());
-                Debug.Log("AI has built a spawner");
+                gainMine(build.GetComponent<Mine>());
+                Debug.Log("AI has built a mine");
             }
         }
         // check to see if we need to attack (for income reasons that is you have a negative income and are bankrupt)
@@ -181,9 +182,10 @@ public class Player_controls : MonoBehaviour
         if (stockpile[0] < 0 || stockpile[1] < 0)
         {
             bankrupt = true;
+            Debug.Log("We are broke....");
         }
         else bankrupt = false;
-
+     
     }
 
     // modify common income
@@ -266,88 +268,86 @@ public class Player_controls : MonoBehaviour
     // when a attacker unit is destroyed remove it from this list
     public void LoseUnit(Unit soldier)
     {
-        
+      
         if (army.Contains(soldier))
         {
-            (int, int) upkeep = soldier.showUpkeep();
+            (int, int) upkeep = (2, 1);
             upkeep = (upkeep.Item1 * -1, upkeep.Item2 * -1);
-            int check = changeResourcesIncome(upkeep);
+            int check = changeResourcesUpkeep(upkeep);
             if (check == 0) Debug.Log("A Unit has 0 upkeep");
             army.Remove(soldier);
-        }
-        else if (garrison.Contains(soldier))
+        }else if (garrison.Contains(soldier))
         {
-            (int, int) upkeep = soldier.showUpkeep();
+            (int, int) upkeep = (2,1);
             upkeep = (upkeep.Item1 * -1, upkeep.Item2 * -1);
-            int check = changeResourcesIncome(upkeep);
+            int check = changeResourcesUpkeep(upkeep);
             if (check == 0) Debug.Log("A Unit has 0 upkeep");
             garrison.Remove(soldier);
-        }
-        else
+        } else
         {
             Debug.Log("A unit deletion error has happend");
+            Debug.Log(human);
         }
+    
     }
 
     // when a spawner is created add it to the list
     public void gainSpawner(Spawner building)
     {
-        Debug.Log("spawner was added new resource count");
         (int, int) cost = building.showCost();
-        if (Math.Abs(cost.Item1) > 0)
-        {
-            this.stockpile[0] -= (cost.Item1);
-            // Debug.Log(stockpile[0]);
-    
-        } else Debug.Log("spawner has 0 common cost");
+            this.stockpile[0] -= (15);
 
-        if (Math.Abs(cost.Item2) > 0)
-        {
-            this.stockpile[1] -= (cost.Item2);
-            // Debug.Log(stockpile[1]);
-         
-        } else Debug.Log("spawner has 0 Rare cost");
+ 
+            this.stockpile[1] -= (10);
+     
             spawnerList.AddFirst(building);
+      
     }
 
     // when a mine is added, add it to the list
     public void gainMine(Mine building)
     {
-        Debug.Log("Mine was added new resource count");
         (int, int) cost = building.showCost();
-        if (Math.Abs(cost.Item1) > 0)
-        {
-            this.stockpile[0] -= (cost.Item1);
-            // Debug.Log(stockpile[0]);
+      
+            this.stockpile[0] -= (10);
+       
+      
+            this.stockpile[1] -= (5);
 
-        }
-        else Debug.Log("spawner has 0 common cost");
-
-        if (Math.Abs(cost.Item2) > 0)
-        {
-            this.stockpile[1] -= (cost.Item2);
-            // Debug.Log(stockpile[1]);
-
-        }
-        else Debug.Log("spawner has 0 Rare cost");
-        changeResourcesIncome(building.showIncome());
+        changeResourcesIncome((10,5));
         mineList.AddFirst(building);
     }
 
     // when an attack is spawned add it to the army list
     public void gainAttacker(Unit soldier)
     {
-        (int, int) upkeep = soldier.showUpkeep();
-        int check = changeResourcesUpkeep(upkeep);
-        if (check == 0) Debug.Log("a Unit has no upkeep!");
+        if (soldier.showType() == 1)
+        {
+            changeResourcesUpkeep((2, 1));
+        }
+        else
+        {
+            Debug.Log("WHAT HAVE I DONE?");
+        }
+        if(human) { Debug.Log("Before spawn: " + army.Count()); }
         army.AddFirst(soldier);
+        if(human) { Debug.Log("After spawn: " + army.Count()); }
     }
     // when an defender is spawned add it to the garrison list
     public void gainDefender(Unit soldier)
     {
-        (int, int) upkeep = soldier.showUpkeep();
-        int check = changeResourcesUpkeep(upkeep);
-        if (check == 0) Debug.Log("a Unit has no upkeep!");
+        if(soldier.showType() == 1)
+        {
+            changeResourcesUpkeep((2,1));
+        }
+        else
+        {
+            Debug.Log("WHAT HAVE I DONE?");
+        }
+        if (human)
+        {
+            Debug.Log(soldier.showUpkeep());
+        }
         garrison.AddFirst(soldier);
     }
     // finds the location of all buildings and units and returns a linked list of the cordinates
@@ -382,14 +382,15 @@ public class Player_controls : MonoBehaviour
         if (Math.Abs(nr.Item1) > 0)
         {
             this.changeIncomeCommon(nr.Item1);
-            return 1;
         }
-        else if (Math.Abs(nr.Item2) > 0)
+        
+        if (Math.Abs(nr.Item2) > 0)
         {
             this.changeIncomeRare(nr.Item2);
-            return 1;
         }
         else return 0;
+
+        return 1;
     }
 
     // takes the resources from something and changes the upkeep
@@ -398,14 +399,13 @@ public class Player_controls : MonoBehaviour
         if (Math.Abs(nr.Item1) > 0)
         {
             this.changeUpkeepCommon(nr.Item1);
-            return 1;
         }
-        else if (Math.Abs(nr.Item2) > 0)
+        if (Math.Abs(nr.Item2) > 0)
         {
             this.changeUpkeepRare(nr.Item2);
-            return 1;
         }
         else return 0;
+        return 1;
     }
 
 
@@ -431,12 +431,19 @@ public class Player_controls : MonoBehaviour
     public Faction showFaction() {
         return faction;
     }
+
+    public bool checkHuman()
+    {
+        return human;
+    }
     //gui layer to show resources
     public void OnGUI() {
-        GUI.Label(new Rect(10,10,10000,20), "Common Income: " + (showCommonIncome()).ToString());
-        GUI.Label(new Rect(10,-1,10000,20), "Rare Income: " + (showRareIncome()).ToString());
-        GUI.Label(new Rect(10,20,10000,20), "Upkeep: " + upkeep[0].ToString());
-        GUI.Label(new Rect(10,30,10000,20), "StockPile Common,Rare: " + stockpile[0].ToString() + " , " + stockpile[1].ToString());
+        if (human) { 
+            GUI.Label(new Rect(10, 10, 10000, 20), "Common Income: " + (showCommonIncome()).ToString());
+            GUI.Label(new Rect(10, -1, 10000, 20), "Rare Income: " + (showRareIncome()).ToString());
+            GUI.Label(new Rect(10, 20, 10000, 20), "Upkeep Common,Rare: " + upkeep[0].ToString()+ "," + upkeep[1].ToString());
+            GUI.Label(new Rect(10, 30, 10000, 20), "StockPile Common,Rare: " + stockpile[0].ToString() + " , " + stockpile[1].ToString());
+        }
     }
 }
 

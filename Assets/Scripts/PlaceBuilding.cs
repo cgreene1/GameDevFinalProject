@@ -33,13 +33,13 @@ public class PlaceBuilding : MonoBehaviour
     void Update()
     {
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        if(wantPlaceSpawn && Input.GetMouseButtonDown(0))
+        if(wantPlaceSpawn && Input.GetMouseButtonDown(0) && !humanPlayer.isBankrupt())
         {
             buildingControls.setPlayer(humanPlayer);
             placeSpawn();
             wantPlaceSpawn = false;
         }
-        if (wantPlaceMine && Input.GetMouseButtonDown(0))
+        if (wantPlaceMine && Input.GetMouseButtonDown(0) && !humanPlayer.isBankrupt())
         {
             buildingControls.setPlayer(humanPlayer);
             placeMine();
@@ -54,8 +54,6 @@ public class PlaceBuilding : MonoBehaviour
         buildingControls.setUnitPrefab(unitPrefab);
         buildingControls.setFaction(humanPlayer.showFaction());
         buildingControls.setSpawnLocation((int)spawnPos.y, (int)spawnPos.x);
-        
-        Debug.Log("(" + (int)spawnPos.x + " , " + (int)spawnPos.y + ")");
         GameObject build = buildingControls.buildSpawnerPrefab(humanPlayer);
 
     }
@@ -66,8 +64,7 @@ public class PlaceBuilding : MonoBehaviour
         buildingControls.setFaction(humanPlayer.showFaction());
         buildingControls.setPlayer(humanPlayer);
         buildingControls.setSpawnLocation((int)spawnPos.y, (int)spawnPos.x);
-        Debug.Log("(" + (int)spawnPos.x + " , " + (int)spawnPos.y + ")");
-        GameObject build = buildingControls.buildMinePrefab();
+        GameObject build = buildingControls.buildMinePrefab(humanPlayer);
 
     }
     /*

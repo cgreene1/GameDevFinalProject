@@ -33,27 +33,17 @@ public class Spawner : MonoBehaviour
         trans = gameObject.GetComponent<Transform>();
         population = 0;
         cost = (10, 10);
-        active = false;
-        Debug.Log(player.checkHuman());
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (this.tag == "Enemy" && !active)
-        {
-            active = true;
-            InvokeRepeating("spawn", spawnDelay, spawnDelay);
-            // unitPrefab = defaultUnit;
-            isOffense = true;
-
-        }
     }
 
     public void setVals(bool off, GameObject pre, Faction fact, Player_controls owner){
         
         // if(this.tag != "Enemy") unitPrefab = pre;
-        // else Debug.Log("enemy spawner");
+        Debug.Log("enemy spawner");
         isOffense = off;
         faction = fact;
         this.tag = faction.showName();
@@ -84,7 +74,7 @@ public class Spawner : MonoBehaviour
                 player.gainDefender(newUnit.GetComponent<Unit>());
             }
             else { Debug.Log("What am I a pacifist?"); }
-
+        
     }
 
     public (int, int) showCost()

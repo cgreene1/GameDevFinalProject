@@ -45,7 +45,6 @@ public class Building_Controls : MonoBehaviour
             else{
                 newSpawner = map.addBuilding(spawnerPrefab, row, col);  
             }
-            Debug.Log("building controls: " + faction.showName());
             spawnScript = newSpawner.GetComponent<Spawner>();
             spawnScript.setVals(isOffense, unitPrefab, faction, builder);
             builder.gainSpawner(spawnScript);

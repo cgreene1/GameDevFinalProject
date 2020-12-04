@@ -73,6 +73,7 @@ public class Player_controls : MonoBehaviour
         Debug.Log("AI economy " + stockpile[0] + "," + stockpile[1]);
         Debug.Log("AI income " + income[0] + "," + income[1]);
         Debug.Log("AI upkeep " + upkeep[0] + "," + upkeep[1]);
+        Debug.Log("AI army size " + army.Count());
         if (canAfford(test.showCost()))
         {
             Debug.Log("I can afford the spawner");
@@ -173,6 +174,11 @@ public class Player_controls : MonoBehaviour
     //Handle income and upkeep for the player will declare bankrupt if less than 0 of a single resource
     private void finances()
     {
+        if(!audit())
+        {
+            Debug.Log("There was an error in the money");
+        }
+        
         int common_change = (income[0] - upkeep[0]);
         int rare_change = (income[1] - upkeep[1]);
         stockpile[0] += common_change;
@@ -221,11 +227,14 @@ public class Player_controls : MonoBehaviour
     public void charge(Player_controls target)
     {
         LinkedList<(int, int)> targets = target.locateAssets();
-        foreach (Unit x in army)
+        if (targets.Count > 0)
         {
-            if (!x.showCharge())
+            foreach (Unit x in army)
             {
-                x.charge(targets);
+                if (!x.showCharge())
+                {
+                    x.charge(targets);
+                }
             }
         }
     }
@@ -286,7 +295,6 @@ public class Player_controls : MonoBehaviour
         } else
         {
             Debug.Log("A unit deletion error has happend");
-            Debug.Log(human);
         }
     
     }
@@ -329,9 +337,9 @@ public class Player_controls : MonoBehaviour
         {
             Debug.Log("WHAT HAVE I DONE?");
         }
-        if(human) { Debug.Log("Before spawn: " + army.Count()); }
+    
         army.AddFirst(soldier);
-        if(human) { Debug.Log("After spawn: " + army.Count()); }
+        
     }
     // when an defender is spawned add it to the garrison list
     public void gainDefender(Unit soldier)
@@ -445,5 +453,39 @@ public class Player_controls : MonoBehaviour
             GUI.Label(new Rect(10, 30, 10000, 20), "StockPile Common,Rare: " + stockpile[0].ToString() + " , " + stockpile[1].ToString());
         }
     }
+
+    private bool audit()
+    {
+        int upkeep0 = 0;
+        int upkeep1 = 0;
+
+        foreach(Unit x in army)
+        {
+            if(x.showType() == 1)
+            {
+                upkeep0 += 2;
+                upkeep1 += 1;
+            }
+        }
+        foreach (Unit x in garrison)
+        {
+            if (x.showType() == 1)
+            {
+                upkeep0 += 2;
+                upkeep1 += 1;
+            }
+        }
+
+        if (upkeep0 != upkeep[0] || upkeep1 != upkeep[1])
+        {
+            upkeep[0] = upkeep0;
+            upkeep[1] = upkeep1;
+            return false;
+        }
+        else return true;
+    
+    }
+
+
 }
 

@@ -59,7 +59,6 @@ public class PlaceBuilding : MonoBehaviour
     }
     public void placeMine()
     {
-        Debug.Log("Miner button heard");
         Vector2 spawnPos = new Vector2(Mathf.Round(mousePos.x), Mathf.Round(mousePos.y));
         buildingControls.setFaction(humanPlayer.showFaction());
         buildingControls.setPlayer(humanPlayer);

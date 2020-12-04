@@ -29,7 +29,7 @@ public class Unit : MonoBehaviour
     {
         health = 100f;
         target = null;
-        charging = false;
+        charging = true;
         speed = 2f;
         range = 1f;
         damage = 5f;

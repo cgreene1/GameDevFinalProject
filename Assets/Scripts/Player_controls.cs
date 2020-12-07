@@ -256,6 +256,10 @@ public class Player_controls : MonoBehaviour
         {
             Debug.Log("A spawner deletion error has happend");
         }
+        if (this.lost())
+        {
+            Debug.Log("GameOver!!!");
+        }
     }
 
     // when a mine is destroyed remove it from the list, Income should be modififed by the mine

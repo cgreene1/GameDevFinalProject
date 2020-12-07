@@ -19,7 +19,7 @@ public class Spawner : MonoBehaviour
     Map map;
     private bool active;
     [SerializeField] GameObject defaultUnit;
-
+    private float hp;
     int population;
 
     // Start is called before the first frame update
@@ -33,6 +33,7 @@ public class Spawner : MonoBehaviour
         trans = gameObject.GetComponent<Transform>();
         population = 0;
         cost = (10, 10);
+        hp = 200f;
     }
 
     // Update is called once per frame
@@ -85,4 +86,16 @@ public class Spawner : MonoBehaviour
     {
         return unitPrefab;
     }
+
+    public void getHit(Unit enemy)
+    {
+        hp -= (enemy.showDmg() * enemy.showNumAttacks());
+        if(hp <= 0)
+        {
+            CancelInvoke();
+            player.loseSpawner(this);
+            Destroy(this.gameObject);
+        }
+    }
+
 }

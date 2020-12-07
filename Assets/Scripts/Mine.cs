@@ -12,6 +12,7 @@ public class Mine : MonoBehaviour
     bool isRare;
     (int, int) income;
     (int, int) cost;
+    private float hp;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +23,7 @@ public class Mine : MonoBehaviour
         // set income
         income = (10, 10);
         cost = (10, 10);
+        hp = 125;
     }
 
     // Update is called once per frame
@@ -53,4 +55,16 @@ public class Mine : MonoBehaviour
     {
         player = owner;
     }
+
+
+    public void getHit(Unit enemy)
+    {
+        hp -= (enemy.showDmg() * enemy.showNumAttacks());
+        if (hp <= 0)
+        {
+            player.loseMine(this);
+            Destroy(this.gameObject);
+        }
+    }
+
 }

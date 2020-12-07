@@ -81,7 +81,7 @@ public class Map : MonoBehaviour
 
 
 //removes a building from the map display
-    void destroyBuilding(GameObject obj){
+    public void destroyBuilding(GameObject obj){
         buildings.Remove(obj);
         Destroy(obj);
     }

@@ -40,6 +40,7 @@ public class Building_Controls : MonoBehaviour
     public GameObject buildSpawnerPrefab(Player_controls builder){
             GameObject newSpawner;
             if(faction.showName() == "Enemy"){
+            Debug.Log(enemySpawnerPrefab);
                 newSpawner = map.addBuilding(enemySpawnerPrefab, row, col);
             }
             else{
@@ -55,8 +56,8 @@ public class Building_Controls : MonoBehaviour
     //creates a mine prefab and adds it to the map, returns null if cannot be placed
     //should be called AFTER setting things with buttons
     public GameObject buildMinePrefab(Player_controls builder){
-
-        GameObject newMine;
+        
+       GameObject newMine;
         if(faction.showName() == "Enemy"){
             newMine = map.addBuilding(enemyMinePrefab, row, col);
         }

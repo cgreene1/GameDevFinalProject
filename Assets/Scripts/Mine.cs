@@ -50,6 +50,7 @@ public class Mine : MonoBehaviour
     public void setFaction(Faction fact)
     {
         faction = fact;
+        this.tag = faction.showName();
     }
     public void setPlayer(Player_controls owner)
     {
@@ -62,8 +63,9 @@ public class Mine : MonoBehaviour
         hp -= (enemy.showDmg() * enemy.showNumAttacks());
         if (hp <= 0)
         {
+            Debug.Log(this.gameObject);
             player.loseMine(this);
-            Destroy(this.gameObject);
+            map.destroyBuilding(this.gameObject);
         }
     }
 

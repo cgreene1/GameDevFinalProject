@@ -58,7 +58,7 @@ public class Player_controls : MonoBehaviour
         if (!human && !behaving)
         {
             behaving = true;
-            InvokeRepeating("AIBehaviour", 2f, 5f);
+            InvokeRepeating("AIBehaviour", 1f, 2.5f);
         }
         
     }
@@ -96,7 +96,6 @@ public class Player_controls : MonoBehaviour
                     randCol = random.Next(tilemap.cellBounds.min.x + 1, tilemap.cellBounds.max.x -1);
                     randRow = random.Next(tilemap.cellBounds.min.y + 1, tilemap.cellBounds.max.y - 1);
                     offense = random.Next(0,2);
-                    // randPrefab = unitPrefabs[random.Next(0,unitPrefabs.Length)];
                     randPrefab = GameObject.Find("BuildingControls").GetComponent<Building_Controls>().getSpawner().GetComponent<Spawner>().showUnitPrefab();
                     buildingControls.setOffense(offense==1);
                     buildingControls.setUnitPrefab(randPrefab);
@@ -267,10 +266,7 @@ public class Player_controls : MonoBehaviour
     {
         if (mineList.Contains(mine))
         {
-            (int, int) losses = mine.showIncome();
-            losses = (losses.Item1 * -1, losses.Item2 * -1);
-            int check = changeResourcesIncome(losses);
-            if (check == 0) Debug.Log("a mine had no income!");
+            changeResourcesIncome((-10, -5));
             mineList.Remove(mine);
         }
         else

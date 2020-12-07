@@ -94,7 +94,8 @@ public class Spawner : MonoBehaviour
         {
             CancelInvoke();
             player.loseSpawner(this);
-            Destroy(this.gameObject);
+            Debug.Log(this.gameObject);
+            map.destroyBuilding(this.gameObject);
         }
     }
 

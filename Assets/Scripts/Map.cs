@@ -40,6 +40,7 @@ public class Map : MonoBehaviour
     public bool canPlace(int row, int col, int sizecol, int sizerow){
         Vector3 pos = new Vector3((float)col, (float)row, 0f);
         foreach (GameObject build in buildings){
+            Debug.Log(build);
             Renderer rend = build.GetComponent<Renderer>();
             if(rend.bounds.Contains(pos)){
                 return false;
@@ -62,6 +63,7 @@ public class Map : MonoBehaviour
 //prefab for building should have spawner script with player-chosen params in it or mine script with all resource info
 //requires input for the position IN TILES of the spawner to be placed
     public GameObject addBuilding(GameObject prefab, int row, int col){
+        Debug.Log(prefab.GetComponent<Renderer>());
        Renderer r = prefab.GetComponent<Renderer>();
         (int sizex, int sizey) = tileScale(r);
         if(canPlace( row,  col, sizex, sizey)){
@@ -76,7 +78,7 @@ public class Map : MonoBehaviour
 
 
 //removes a building from the map display
-    void destroyBuilding(GameObject obj){
+    public void destroyBuilding(GameObject obj){
         buildings.Remove(obj);
         Destroy(obj);
     }

@@ -32,7 +32,7 @@ public class Unit : MonoBehaviour
     {
         health = 100f;
         target = null;
-        charging = true;
+        charging = gameObject.tag == "Enemy";
         speed = 2f;
         range = 1f;
         damage = 5f;
@@ -105,13 +105,14 @@ public class Unit : MonoBehaviour
 
 
     //here is the shortest path to find the closest enemy when called
-    private void charge(){
-        if(gameObject.tag != "Enemy")
-            charging = true;
+    public void charge(){
+        charging = true;
+        Debug.Log("Unit is charging");
     }
+    
 
     private void attack(){
-            hit(target);
+        hit(target);
     }
     // you take take dmg
     private void getHit(Unit foe){

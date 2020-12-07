@@ -486,6 +486,17 @@ public class Player_controls : MonoBehaviour
     
     }
 
+    public void setCharge(){
+        Debug.Log("setting to charge");
+        
+        List<Unit> soldiers = new List<Unit>();
+
+        soldiers.AddRange(GameObject.FindObjectsOfType<Unit>().Where(u => u.CompareTag("Player")));
+        Debug.Log("total soldiers: " + soldiers.Count());
+        foreach(Unit soldier in soldiers){
+            soldier.charge();
+        }
+    }
 
 }
 

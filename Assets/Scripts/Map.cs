@@ -46,6 +46,11 @@ public class Map : MonoBehaviour
             }
 
         }
+        Debug.Log(col+" "+row);
+        if(col < 0) col--;
+        if(col>0) col++;
+        if(row<0) row--;
+        if(row>0) row++;
         Vector3Int intPos = new Vector3Int(col, row, 0);
         return map.cellBounds.Contains(intPos);
         // return true;
@@ -76,7 +81,7 @@ public class Map : MonoBehaviour
 
 
 //removes a building from the map display
-    void destroyBuilding(GameObject obj){
+    public void destroyBuilding(GameObject obj){
         buildings.Remove(obj);
         Destroy(obj);
     }

@@ -45,6 +45,7 @@ public class Building_Controls : MonoBehaviour
             else{
                 newSpawner = map.addBuilding(spawnerPrefab, row, col);  
             }
+            if(newSpawner == null) Debug.LogError("Spawner can't be placed at "+col+", "+row);
             spawnScript = newSpawner.GetComponent<Spawner>();
             spawnScript.setVals(isOffense, unitPrefab, faction, builder);
             builder.gainSpawner(spawnScript);

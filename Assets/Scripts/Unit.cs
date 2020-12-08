@@ -15,7 +15,10 @@ public class Unit : MonoBehaviour
     private float damage;
     private GameObject target;
     private Vector2 camp;
+    // potental kinds of targets
     private Unit enemyScript;
+    private Mine enemyMineScript;
+    private Spawner enemySpawnerScript;
     [SerializeField] Faction faction;
     private (int, int) upkeep;
     private Player_controls player;
@@ -29,7 +32,7 @@ public class Unit : MonoBehaviour
     {
         health = 100f;
         target = null;
-        charging = true;
+        charging = gameObject.tag == "Enemy";
         speed = 2f;
         range = 1f;
         damage = 5f;
@@ -102,13 +105,14 @@ public class Unit : MonoBehaviour
 
 
     //here is the shortest path to find the closest enemy when called
-    private void charge(){
-        if(gameObject.tag != "Enemy")
-            charging = true;
+    public void charge(){
+        charging = true;
+        Debug.Log("Unit is charging");
     }
+    
 
     private void attack(){
-            hit(target);
+        hit(target);
     }
     // you take take dmg
     private void getHit(Unit foe){
@@ -131,8 +135,38 @@ public class Unit : MonoBehaviour
     // you hit someone else
     public void hit(GameObject target)
     {
-     
-        enemyScript.getHit(this);
+        if (enemyScript != null)
+        {
+            enemyScript.getHit(this);
+        }
+        else if (enemyMineScript != null)
+        {
+            enemyMineScript.getHit(this);
+            if (this.tag == "Player")
+            {
+                findClosest("Enemy");
+            }
+            else
+            {
+                findClosest("Player");
+            }
+        }
+        else if (enemySpawnerScript != null)
+        {
+            enemySpawnerScript.getHit(this);
+            if (this.tag == "Player")
+            {
+                findClosest("Enemy");
+            }
+            else
+            {
+                findClosest("Player");
+            }
+        }
+        else
+        {
+            Debug.Log("Targeting failure");
+        }
     }
 
     private void findClosest(string str) {
@@ -145,7 +179,7 @@ public class Unit : MonoBehaviour
             enemies.Add(enemy.gameObject);
         }
        
-        //enemies.AddRange(GameObject.FindGameObjectsWithTag(str)); //change for AI
+        enemies.AddRange(GameObject.FindGameObjectsWithTag(str)); //change for AI
         //takes in all enemies on the field and calculates distance
         if(enemies.Count > 0){
             GameObject closestEnemy = null;
@@ -162,6 +196,16 @@ public class Unit : MonoBehaviour
 
             target = closestEnemy;
             enemyScript = closestEnemy.GetComponent<Unit>();
+            if (enemyScript == null)
+            {
+                enemyMineScript = closestEnemy.GetComponent<Mine>();
+
+            }
+            if (enemyMineScript == null)
+            {
+                enemySpawnerScript = closestEnemy.GetComponent<Spawner>();
+
+            }
         }
 
     }

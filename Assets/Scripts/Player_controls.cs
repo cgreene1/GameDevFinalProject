@@ -58,7 +58,7 @@ public class Player_controls : MonoBehaviour
         if (!human && !behaving)
         {
             behaving = true;
-            InvokeRepeating("AIBehaviour", 2f, 5f);
+            InvokeRepeating("AIBehaviour", 1f, 2.5f);
         }
         
     }
@@ -68,13 +68,13 @@ public class Player_controls : MonoBehaviour
         Debug.Log("AI Online");
         Tilemap tilemap = map.GetComponent<Tilemap>();
         // check to see if AI can place a building
-        Spawner test = spawner1.GetComponent<Spawner>();
+       // Spawner test = spawner1.GetComponent<Spawner>();
         // show me the state of the AI
         Debug.Log("AI economy " + stockpile[0] + "," + stockpile[1]);
         Debug.Log("AI income " + income[0] + "," + income[1]);
         Debug.Log("AI upkeep " + upkeep[0] + "," + upkeep[1]);
         Debug.Log("AI army size " + army.Count());
-        if (canAfford(test.showCost()))
+        if (canAfford((15,10)))
         {
             Debug.Log("I can afford the spawner");
             // check to see if income is postive
@@ -82,7 +82,7 @@ public class Player_controls : MonoBehaviour
             {
                 // build a spawner (you can afford to build it so do it) TODO  
                 // set spawn near the other spawners
-                bool flag = true;
+               // bool flag = true;
                 System.Random random = new System.Random();
                // int ran = random.Next(0,spawnerList.Count);
                 (int col, int row) = map.getSize();
@@ -256,6 +256,10 @@ public class Player_controls : MonoBehaviour
         {
             Debug.Log("A spawner deletion error has happend");
         }
+        if (lost())
+        {
+            Debug.Log("GameOver!!!");
+        }
     }
 
     // when a mine is destroyed remove it from the list, Income should be modififed by the mine
@@ -263,10 +267,7 @@ public class Player_controls : MonoBehaviour
     {
         if (mineList.Contains(mine))
         {
-            (int, int) losses = mine.showIncome();
-            losses = (losses.Item1 * -1, losses.Item2 * -1);
-            int check = changeResourcesIncome(losses);
-            if (check == 0) Debug.Log("a mine had no income!");
+            changeResourcesIncome((-10, -5));
             mineList.Remove(mine);
         }
         else
@@ -486,6 +487,17 @@ public class Player_controls : MonoBehaviour
     
     }
 
+    public void setCharge(){
+        Debug.Log("setting to charge");
+        
+        List<Unit> soldiers = new List<Unit>();
+
+        soldiers.AddRange(GameObject.FindObjectsOfType<Unit>().Where(u => u.CompareTag("Player")));
+        Debug.Log("total soldiers: " + soldiers.Count());
+        foreach(Unit soldier in soldiers){
+            soldier.charge();
+        }
+    }
 
 }
 

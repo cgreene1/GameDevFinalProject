@@ -73,4 +73,9 @@ public class Manager : MonoBehaviour
     public Player_controls showHuman() {
         return playerlist[0].GetComponent<Player_controls>();
     }
+
+    public void playerCharge()
+    {
+        playerlist[0].GetComponent<Player_controls>().setCharge();
+    }
 }

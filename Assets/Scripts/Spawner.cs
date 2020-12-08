@@ -65,6 +65,7 @@ public class Spawner : MonoBehaviour
     void spawn(){
         GameObject newUnit = Instantiate(unitPrefab, new Vector3(trans.position.x, trans.position.y+1, 0), Quaternion.identity);
         newUnit.tag = this.tag;
+        active = true;
         newUnit.GetComponent<Unit>().getPlayer(player);
             if (isOffense)
             {
@@ -82,7 +83,19 @@ public class Spawner : MonoBehaviour
     {
         return cost;
     }
+    public void stopSpawning()
+    {
+        CancelInvoke();
+        active = false;
+    }
 
+    public void reStart()
+    {
+        if (!active)
+        {
+            spawn();
+        } 
+    }
     public GameObject showUnitPrefab()
     {
         return unitPrefab;

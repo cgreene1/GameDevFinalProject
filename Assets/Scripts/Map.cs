@@ -46,7 +46,6 @@ public class Map : MonoBehaviour
             }
 
         }
-        Debug.Log(col+" "+row);
         if(col < 0) col--;
         if(col>0) col++;
         if(row<0) row--;

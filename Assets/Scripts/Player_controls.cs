@@ -188,9 +188,20 @@ public class Player_controls : MonoBehaviour
         if (stockpile[0] < 0 || stockpile[1] < 0)
         {
             bankrupt = true;
+            foreach (Spawner spawn in spawnerList)
+            {
+                spawn.stopSpawning();
+            }
             Debug.Log("We are broke....");
         }
-        else bankrupt = false;
+        else
+        {
+            bankrupt = false;
+            foreach (Spawner spawn in spawnerList)
+            {
+                spawn.reStart();
+            }
+        }
      
     }
 

@@ -9,7 +9,6 @@ public class Mine : MonoBehaviour
     Renderer render;
     Map map;
     Player_controls player;
-    bool isRare;
     (int, int) income;
     (int, int) cost;
     private float hp;
@@ -19,7 +18,6 @@ public class Mine : MonoBehaviour
         map = GameObject.Find("Map").GetComponent<Map>();
         render = gameObject.GetComponent<Renderer>();
         trans = gameObject.GetComponent<Transform>();
-        isRare = false;
         // set income
         income = (10, 10);
         cost = (10, 10);
@@ -39,10 +37,7 @@ public class Mine : MonoBehaviour
     public (int x, int y) getSize(){
         return map.tileScale(render);
     }
-    public (int,int) showIncome()
-    {
-        return income;
-    }
+  
     public (int,int) showCost()
     {
         return cost;

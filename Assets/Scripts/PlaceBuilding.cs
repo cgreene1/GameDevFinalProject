@@ -45,6 +45,12 @@ public class PlaceBuilding : MonoBehaviour
             placeMine();
             wantPlaceMine = false;
         }
+        if (Input.GetKeyDown(KeyCode.Alpha1)) {
+            wantSpawner();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2)) {
+            wantMine();
+        }
     }
 
     public void placeSpawn()

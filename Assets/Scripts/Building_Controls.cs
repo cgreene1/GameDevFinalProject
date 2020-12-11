@@ -48,10 +48,12 @@ public class Building_Controls : MonoBehaviour
                 newSpawner = map.addBuilding(spawnerPrefab, row, col);  
                 if(newSpawner != null) sound.Play();
             }
-            if(newSpawner == null) Debug.LogError("Spawner can't be placed at "+col+", "+row);
-            spawnScript = newSpawner.GetComponent<Spawner>();
-            spawnScript.setVals(isOffense, unitPrefab, faction, builder);
-            builder.gainSpawner(spawnScript);
+            if(newSpawner == null) Debug.Log("Spawner can't be placed at "+col+", "+row);
+            else{
+                spawnScript = newSpawner.GetComponent<Spawner>();
+                spawnScript.setVals(isOffense, unitPrefab, faction, builder);
+                builder.gainSpawner(spawnScript);
+            }
             return newSpawner;
     }
 
@@ -67,11 +69,15 @@ public class Building_Controls : MonoBehaviour
         else{
             newMine = map.addBuilding(minePrefab, row, col);
         }
-        Mine mineScript = newMine.GetComponent<Mine>();
-        mineScript.setFaction(builder.showFaction());
-        mineScript.setPlayer(builder);
-        builder.gainMine(mineScript);
+        if(newMine != null){
+            Mine mineScript = newMine.GetComponent<Mine>();
+            mineScript.setFaction(builder.showFaction());
+            mineScript.setPlayer(builder);
+            builder.gainMine(mineScript);
+            return newMine;
+        }
         return newMine;
+
     }
 
     public void setUnitPrefab(GameObject prefab){

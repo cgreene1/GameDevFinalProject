@@ -7,25 +7,31 @@ public class GridManager : MonoBehaviour
     public Sprite sprite;
     public int[,] Grid;
     int Vertical, Horizontal, Columns, Rows;
+    bool gridOn = false;
     // Start is called before the first frame update
     public void GridSpawn()
     {
        // Debug.Log("Gridspawn Called");
+        
         Vertical = (int)Camera.main.orthographicSize;
         Horizontal = Vertical * Screen.width / Screen.height;
         Columns = Horizontal * 4;
         Rows = Vertical * 4;
         Grid = new int[Columns, Rows];
-        for (int i = 0; i < Columns; i++)
-        {
-           // Debug.Log("in first for loop");
-            for (int j = 0; j < Rows; j++)
+        if(!gridOn){
+            for (int i = 0; i < Columns; i++)
             {
-                //Debug.Log("in second for loop");
-                Grid[i, j] = Random.Range(0, 10);
-                SpawnTile(i, j, Grid[i, j]);
+            // Debug.Log("in first for loop");
+                for (int j = 0; j < Rows; j++)
+                {
+                    //Debug.Log("in second for loop");
+                    Grid[i, j] = Random.Range(0, 10);
+                    SpawnTile(i, j, Grid[i, j]);
+                }
             }
+            gridOn = true;
         }
+
     }
     public void SpawnTile(int x, int y, int value)
     {
@@ -44,5 +50,6 @@ public class GridManager : MonoBehaviour
         {
             Destroy(coord);
         }
+        gridOn = false;
     }
 }

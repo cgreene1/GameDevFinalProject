@@ -17,6 +17,8 @@ public class Building_Controls : MonoBehaviour
     Spawner spawnScript;
     int row, col;
     Player_controls player;
+    AudioSource sound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +26,7 @@ public class Building_Controls : MonoBehaviour
         isOffense = true;
         row = 0;
         col = 0;
-
+        sound = GetComponent<AudioSource>();
         spawnScript = spawnerPrefab.GetComponent("Spawner") as Spawner;
 
     }
@@ -44,6 +46,7 @@ public class Building_Controls : MonoBehaviour
             }
             else{
                 newSpawner = map.addBuilding(spawnerPrefab, row, col);  
+                if(newSpawner != null) sound.Play();
             }
             if(newSpawner == null) Debug.LogError("Spawner can't be placed at "+col+", "+row);
             spawnScript = newSpawner.GetComponent<Spawner>();

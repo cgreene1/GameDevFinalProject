@@ -21,7 +21,7 @@ public class Mine : MonoBehaviour
         // set income
         income = (10, 10);
         cost = (10, 10);
-        hp = 125f;
+        hp = 1500f;
     }
 
     // Update is called once per frame

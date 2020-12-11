@@ -45,7 +45,7 @@ public class Unit : MonoBehaviour
         unitType = 1;
         upkeep = (1, 1);
 
-        camp = new Vector2(Random.Range(-3f, -5f), Random.Range(-1f, 1f));
+        camp = new Vector2(Random.Range(-1f, 8f), Random.Range(-1f, 1f));
     }
 
 

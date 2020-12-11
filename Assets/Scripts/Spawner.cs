@@ -34,7 +34,7 @@ public class Spawner : MonoBehaviour
         trans = gameObject.GetComponent<Transform>();
         population = 0;
         cost = (10, 10);
-        hp = 200;
+        hp = 2000;
     }
 
     // Update is called once per frame

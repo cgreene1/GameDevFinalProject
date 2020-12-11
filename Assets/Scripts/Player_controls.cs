@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 //using UnityEditor.U2D.Common;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 public class Player_controls : MonoBehaviour
 {
@@ -269,7 +270,7 @@ public class Player_controls : MonoBehaviour
         }
         if (lost())
         {
-            Debug.Log("GameOver!!!");
+            SceneManager.LoadScene("EndGame");
         }
     }
 

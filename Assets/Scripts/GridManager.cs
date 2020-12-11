@@ -32,9 +32,10 @@ public class GridManager : MonoBehaviour
         //ebug.Log("spawntile called");
         GameObject g = new GameObject("x: " + x + "y: " + y);
         g.tag = "Coords";
-        g.transform.position = new Vector3(x - (Horizontal - 8.0f), y - (Vertical + 2.0f));
+        g.transform.position = new Vector3(x - (Horizontal - 6.0f), y - (Vertical + 2.0f));
         var s = g.AddComponent<SpriteRenderer>();
         s.sprite = sprite;
+        s.GetComponent<SpriteRenderer>().color = new Color (1, 1, 1, 0.3f);
     }
 
     public void DestroyGrid() {

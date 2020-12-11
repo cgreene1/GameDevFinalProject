@@ -14,6 +14,7 @@ public class PlaceBuilding : MonoBehaviour
     private GameObject unitPrefab;
     private bool wantPlaceSpawn;
     private bool wantPlaceMine;
+    GridManager grid;
 
     private bool isAnObjectSelected = false;
 
@@ -27,6 +28,7 @@ public class PlaceBuilding : MonoBehaviour
         humanPlayer = GameObject.Find("Manager").GetComponent<Manager>().showHuman();
         wantPlaceSpawn = false;
         wantPlaceMine = false;
+        grid = GameObject.Find("NewMaps").GetComponent<GridManager>();
     }
 
     // Update is called once per frame
@@ -38,12 +40,14 @@ public class PlaceBuilding : MonoBehaviour
             buildingControls.setPlayer(humanPlayer);
             placeSpawn();
             wantPlaceSpawn = false;
+            grid.DestroyGrid();
         }
         if (wantPlaceMine && Input.GetMouseButtonDown(0) && !humanPlayer.isBankrupt())
         {
             buildingControls.setPlayer(humanPlayer);
             placeMine();
             wantPlaceMine = false;
+            grid.DestroyGrid();
         }
         if (Input.GetKeyDown(KeyCode.Alpha1)) {
             wantSpawner();
